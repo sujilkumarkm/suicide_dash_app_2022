@@ -9,7 +9,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
-#data for the gaelic plots
+#data for the Suicide plots
 loc_data = pd.read_csv('assets/cleaned_data.csv')
 
 
@@ -33,7 +33,7 @@ layout = html.Div([
    
         dbc.Row(children=[
             dbc.Col(children=[
-                html.H1('Overlooking Gaelic',
+                html.H1('Overlooking Suicide',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',

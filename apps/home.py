@@ -14,17 +14,17 @@ layout = html.Div([
             #Header span the whole row
             #className: Often used with CSS to style elements with common properties.
             # dbc.Col(html.Img(src = '/assets/wall_paper.jpg', height= "500px", className="text-center")),
-            dbc.Col(html.H1("Welcome DKIT Gaelic dashboard", className="text-center")
+            dbc.Col(html.H1("Welcome DKIT Suicide dashboard", className="text-center")
                     , className="mb-5 mt-5")            
         ]),
         dbc.Row([
-            dbc.Col(html.H5(children='This project is created to dive deep inot the data of Gaelic games held between different teams in ireland. The purpose of this project to study and understands different trends or patterns in the data for the betterment of young developing gelic player community. Python Dash and plotly are used to make visualisation from the dataset. This project is conducted as part of the coninueous assesment held in Dundalk Institute of Technology as part of Msc in Data Analysis'
+            dbc.Col(html.H5(children='This project is created to dive deep inot the data of Suicides held between different teams in ireland. The purpose of this project to study and understands different trends or patterns in the data for the betterment of young developing gelic player community. Python Dash and plotly are used to make visualisation from the dataset. This project is conducted as part of the coninueous assesment held in Dundalk Institute of Technology as part of Msc in Data Analysis'
                                      )
                     , className="mb-4")
             ]),
 
         dbc.Row([
-            dbc.Col(html.H5(children='Gaelic games (Irish: Cluichí Gaelacha) are sports played in Ireland under the auspices of the Gaelic Athletic Association (GAA). They include Gaelic football, hurling, Gaelic handball, and rounders. Womens versions of hurling and football are also played: camogie, organised by the Camogie Association of Ireland, and ladies Gaelic football, organised by the Ladies Gaelic Football Association.'
+            dbc.Col(html.H5(children='Suicides (Irish: Cluichí Gaelacha) are sports played in Ireland under the auspices of the Suicide Athletic Association (GAA). They include Suicide football, hurling, Suicide handball, and rounders. Womens versions of hurling and football are also played: camogie, organised by the Camogie Association of Ireland, and ladies Suicide football, organised by the Ladies Suicide Football Association.'
                 )
                     , className="mb-5")
         ]),

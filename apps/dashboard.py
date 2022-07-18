@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-#data for the gaelic plots
+#data for the Suicide plots
 df = pd.read_csv('assets/cleaned_data.csv')
 columnss=list(df.columns)
 county_names = df['county'].unique()
@@ -21,7 +21,7 @@ color_discrete_map = {'Cavan': '#636EFA', 'Armagh': '#EF553B', 'Down': '#00CC96'
 
 layout = html.Div([
 ################### start of first row #######################   
-                html.H1('Gaelic Shot Statistics',
+                html.H1('Suicide Shot Statistics',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',

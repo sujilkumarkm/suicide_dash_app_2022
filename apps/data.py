@@ -12,7 +12,7 @@ from dash import Dash, dash_table
 from app import app
 
 
-#data for the gaelic plots
+#data for the Suicide plots
 #data for the region plot
 df = pd.read_csv('assets/cleaned_data1.csv')
 dat_columns = df.columns
@@ -21,7 +21,7 @@ dat_columns = df.columns
 
 layout = html.Div([
             dbc.Col(children=[
-                html.H1('Gaelic Data',
+                html.H1('Suicide Data',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',
