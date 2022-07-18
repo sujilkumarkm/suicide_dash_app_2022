@@ -18,13 +18,13 @@ layout = html.Div([
                     , className="mb-5 mt-5")            
         ]),
         dbc.Row([
-            dbc.Col(html.H5(children='This project is created to dive deep inot the data of Suicides held between different teams in ireland. The purpose of this project to study and understands different trends or patterns in the data for the betterment of young developing gelic player community. Python Dash and plotly are used to make visualisation from the dataset. This project is conducted as part of the coninueous assesment held in Dundalk Institute of Technology as part of Msc in Data Analysis'
+            dbc.Col(html.H5(children='This iteration is a deep dive into the suicide dataset to learn much more about the reasons for the thousands of suicides that occur each year around the world. Even though various studies on suicide have already been done previously, such as John et al. (2018), this study aimed to produce new insights that can help government bodies better grasp the problems that lie beneath them. This research could also benefit them in developing new strategies to minimize mortality rates over time. This research will look at a variety of suicide attributes and predict how many more fatalities will occur in various countries in the next years.'
                                      )
                     , className="mb-4")
             ]),
 
         dbc.Row([
-            dbc.Col(html.H5(children='Suicides (Irish: Cluichí Gaelacha) are sports played in Ireland under the auspices of the Suicide Athletic Association (GAA). They include Suicide football, hurling, Suicide handball, and rounders. Womens versions of hurling and football are also played: camogie, organised by the Camogie Association of Ireland, and ladies Suicide football, organised by the Ladies Suicide Football Association.'
+            dbc.Col(html.H5(children='The goal of this research is to figure out why people commit suicide in each country. Every year, 800,000 individuals commit suicide, according to Wikipedia (2012). Suicide, for example, is becoming a more prevalent and serious problem in India, according to the World Health Organization (WHO). To address these issues, we must examine various patterns and clusters in the data and determine what circumstances cause someone to consider suicide. In addition, a web-based system will be developed that may offer dynamically illuminating visualizations of the suicide dataset, as well as opportunities for page administrators to submit new suicides to the dataset.'
                 )
                     , className="mb-5")
         ]),
