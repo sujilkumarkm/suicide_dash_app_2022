@@ -48,7 +48,7 @@ layout = html.Div([
 
             dbc.Col(dbc.Card(children=[html.H3(children='About DKIT',
                                                className="text-center"),
-                                       dbc.Col(html.H5(children='Dundalk Institute of Technology is an institute of technology based in Dundalk within County Louth, Ireland. Created as Dundalk Regional Technical College, students were first enrolled in the college in 1971 and was later re-defined as an institute of technology in January, 1998.'
+                                       dbc.Col(html.H5(children='Dundalk Institute of Technology is an institute of technology based in Dundalk within country Louth, Ireland. Created as Dundalk Regional Technical College, students were first enrolled in the college in 1971 and was later re-defined as an institute of technology in January, 1998.'
                 )
                                      , className="mb-5",style={"minHeight": "100px"}),
                                        dbc.Button("Dundalk Institute of Technology (DKIT)",

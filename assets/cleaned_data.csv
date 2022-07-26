@@ -1,4 +1,4 @@
-,shot_id,game,events,county,province,shot_type,set_play,shot_outcome,shot_pressure,assist_type,build_up_passes,shot_method,match_outcome,winning_margin,championship_stage,distance_from_goal,angle
+,shot_id,game,events,country,province,shot_type,set_play,shot_outcome,shot_pressure,assist_type,build_up_passes,shot_method,match_outcome,winning_margin,championship_stage,distance_from_goal,angle
 0,Shot_1,Armagh v Cavan,Shot,Cavan,Ulster,Point Attempt,Free Kick from Hands,Point,Low,Free Kick Won,8.0,Left Foot,Draw,Draw,Provincial Championship,14.56021978,-15.9453959
 1,Shot_2,Armagh v Cavan,Shot,Armagh,Ulster,Goal Attempt,Open Play,Wide,Low,Hand Pass,4.0,Right Foot,Draw,Draw,Provincial Championship,11.18033989,26.56505118
 2,Shot_3,Armagh v Cavan,Shot,Armagh,Ulster,Point Attempt,Open Play,Point,Medium,Kick Pass,3.0,Right Foot,Draw,Draw,Provincial Championship,34.20526275,15.2551187

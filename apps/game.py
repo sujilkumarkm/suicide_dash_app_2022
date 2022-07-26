@@ -115,12 +115,12 @@ layout = html.Div([
 def update_map(yvar):
     df = loc_data
     line_fig = px.line(data_frame=df, 
-                x="shot_id",  y = df[yvar] , color='county',line_group="county", 
-                hover_data=['assist_type','county'],
+                x="shot_id",  y = df[yvar] , color='country',line_group="country", 
+                hover_data=['assist_type','country'],
                  # Add bold variable in hover information
                   hover_name='shot_id',
                  # change labels
-                 labels={'Game':'game','Shot Type':'shot_type','Counties':'county',
+                 labels={'Game':'game','Shot Type':'shot_type','Counties':'country',
                      'Assist Type':'assist_type','Shot Method':'shot_method', 'Set Play':'set_play', 'Distance from Goal':'distance_from_goal'})
     line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
         paper_bgcolor='rgb(233, 238, 245)')

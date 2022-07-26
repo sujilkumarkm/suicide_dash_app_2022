@@ -1,4 +1,4 @@
-county,set_play,shot_outcome,shot_pressure,assist_type,build_up_passes,shot_method,distance_from_goal
+country,set_play,shot_outcome,shot_pressure,assist_type,build_up_passes,shot_method,distance_from_goal
 Cavan,Free Kick from Hands,Point,Low,Free Kick Won,8,Left Foot,14.56021978
 Armagh,Open Play,Wide,Low,Hand Pass,4,Right Foot,11.18033989
 Armagh,Open Play,Point,Medium,Kick Pass,3,Right Foot,34.20526275
