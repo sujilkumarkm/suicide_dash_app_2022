@@ -148,9 +148,13 @@ def update_line_chart(country_names, range_chosen):
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
-    fig = px.scatter(dff[mask], 
-    x="population", y="suicides", color="country", size='population',
-                 hover_name="sex", size_max=60)
+    # fig = px.scatter(dff[mask], 
+    # x="population", y="suicides", color="country", size='population',
+    #              hover_name="sex", size_max=60)
+    fig= px.choropleth(dff[mask],               
+              locations="country_code", color="gdp_per_capita",
+              hover_name="country",  
+              animation_frame="year")
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
