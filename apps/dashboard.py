@@ -13,15 +13,22 @@ import mysql.connector as connection
 mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
 query = "Select * from suicides;"
 df = pd.read_sql(query,mydb)
-df = df.iloc[10:1000]
+# df = df.iloc[10:1000]
 columnss=list(df.columns)
 country_names = df['country'].unique()
 
 
 from app import app
 
-color_discrete_map = {'Cavan': '#636EFA', 'Armagh': '#EF553B', 'Down': '#00CC96',
-    'Dublin': '#AB63FA', 'Kerry': '#FFA15A'}
+{'Albania': '#000000', 'Austria': '#FFFF00', 'Belgium': '#1CE6FF',
+    'Bosnia and Herzegovina': '#FF34FF','Bulgaria': '#FF4A46', 'Croatia': '#008941',
+    'Czech Republic': '#006FA6', 'Denmark': '#A30059', 'Finland': '#FFDBE5',
+    'France': '#7A4900', 'Germany': '#0000A6', 'Greece': '#63FFAC', 'Hungary': '#B79762',
+    'Iceland': '#8FB0FF', 'Ireland': '#004D43','Italy': '#997D87', 'Montenegro': '#5A0007',
+    'Netherlands': '#809693', 'Norway': '#FEFFE6', 'Poland': '#1B4400','Portugal': '#4FC601',
+    'Romania': '#3B5DFF', 'Serbia': '#4A3B53', 'Slovak Republic': '#FF2F80',
+    'Slovenia': '#61615A','Spain': '#BA0900', 'Sweden': '#6B7900', 'Switzerland': '#00C2A0',
+    'Turkey': '#FFAA92','United Kingdom': '#FF90C9'}
 
 
 layout = html.Div([
@@ -38,14 +45,7 @@ layout = html.Div([
                     dcc.Dropdown(id='country_drop',
                                 options=[{'label': i, 'value': i}
                                         for i in country_names],
-                                value=['Argentina', 'Armenia', 'Australia', 'Austria', 'Belgium',
-                                        'Brazil', 'Bulgaria', 'Canada', 'Chile', 'Colombia', 'Croatia',
-                                        'Cuba', 'Czech Republic', 'Denmark', 'Finland', 'France',
-                                        'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel',
-                                        'Italy', 'Japan', 'Mexico', 'Netherlands', 'New Zealand', 'Norway',
-                                        'Poland', 'Portugal', 'Romania', 'Russian Federation',
-                                        'South Africa', 'Spain', 'Sweden', 'Switzerland', 'Thailand',
-                                        'Turkmenistan', 'Ukraine'],
+                                value=country_names,
                                 multi=True,
                                 style={
                                     # 'textAlign': 'center',
@@ -58,14 +58,14 @@ layout = html.Div([
                                 html.Label('Select Suicide Range'),
                                 dcc.RangeSlider(id='suicides_slider',
                                     min=0,
-                                    max=29,
-                                    value=[0,29],
+                                    max=1000,
+                                    value=[0,100],
                                     step= 1,
                                     marks={
-                                        0: '19',
-                                        10: '10',
-                                        20: '20',
-                                        29: '29',
+                                        0: '199',
+                                        200: '399',
+                                        400: '799',
+                                        800: '1000',
                                     },
                                 )
                                 ]),
@@ -89,6 +89,15 @@ layout = html.Div([
 
 ################### End of second row #######################    
 
+            dbc.Row([
+                html.Label('Select Variable to display on the Graphs'),
+                dcc.Dropdown(id='eur_y_dropdown',
+                    options=[
+                        {'label': 'Suicide', 'value': 'suicides'},
+                        {'label': 'Population', 'value': 'population'},
+                        {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
+                    value='suicides',
+                )]),
             dbc.Row([
                  dbc.Col(html.Div(children=[
                 dcc.Graph(id="count_dist_graph")],className='mt-3 ml-3')
@@ -130,17 +139,19 @@ layout = html.Div([
 
 ])
 
-
 @app.callback(
     [Output(component_id='distance_graph', component_property='figure'),
+     Output(component_id='count_dist_graph', component_property='figure'),
      Output(component_id='shot_graph', component_property='figure'),
-     Output(component_id='scat_graph', component_property='figure'),
-     Output(component_id='count_dist_graph', component_property='figure')],
+     Output(component_id='scat_graph', component_property='figure'),],
     [Input(component_id='country_drop', component_property='value'),
      Input(component_id='suicides_slider', component_property='value'),
+     Input(component_id='eur_y_dropdown', component_property='value'),
     ]
 )
-def update_line_chart(country_names, range_chosen):
+def update_line_chart(country_names, range_chosen, eur_yxx_dropdown):
+    if not (country_names or range_chosen or eur_yxx_dropdown):
+        return dash.no_update
     d = df[(df['suicides'] >= range_chosen[0]) & (df['suicides'] <= range_chosen[1])]
     data =[]
     for j in country_names:
@@ -152,12 +163,15 @@ def update_line_chart(country_names, range_chosen):
     # x="population", y="suicides", color="country", size='population',
     #              hover_name="sex", size_max=60)
     fig= px.choropleth(dff[mask],               
-              locations="country_code", color="gdp_per_capita",
+              locations="country_code", 
+              color="suicides",
               hover_name="country",  
-              animation_frame="year")
+              animation_frame="year",
+              title="World map of Suicides")
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
+
     mask2 = dff.country.isin(country_names)
     fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
 
