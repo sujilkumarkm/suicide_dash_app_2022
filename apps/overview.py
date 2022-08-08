@@ -35,8 +35,8 @@ from app import app
 #change background and color text
 colors = {
     #background to rgb(233, 238, 245)
-    'background': '#33cc33',
-    'text': '#4d1919'
+    'background': '#303030 !important',
+    'text': '#ffffff'
 }
 color_discrete_map = {'Asia': '#636EFA', 'Africa': '#EF553B', 'Americas': '#00CC96',
     'Europe': '#AB63FA', 'Oceania': '#FFA15A'}
@@ -70,16 +70,16 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
         html.Div([
             html.Label('Select Population Range'),
                 dcc.RangeSlider(id='pop_range',
-                    min=60011,
-                    max=1318683096,
-                    value=[60011,1318683096],
-                    step= 1,
-                    marks={
-                        60011: '60K',
-                        100000000: '100M',
-                        500000000: '500M',
-                        1318683096: '1320M'
-                    },
+                min=0,
+                max=180,
+                value=[0,180],
+                step= 1,
+                marks={
+                    0: '0',
+                    50: '50',
+                    100: '100',
+                    178: '178',
+                },
                 )
         ],style={'width': '49%', 'float': 'right', 'display': 'inline-block'}),
     ]),
@@ -89,10 +89,10 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
     html.Label('Select Variable to display on Graphs'),
         dcc.Dropdown(id='y_dropdown',
             options=[                    
-                {'label': 'Life Expectancy', 'value': 'suicides'},
+                {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
                 {'label': 'Population', 'value': 'population'},
                 {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
-            value='suicides',
+            value='sucid_in_hundredk',
             style={'width':'50%'}
     ),
     html.Div([
@@ -119,26 +119,27 @@ def update_graph(selected_cont,rangevalue):
     if not selected_cont:
         return dash.no_update
     data =[]
-    d = loc_data[(loc_data['population'] >= rangevalue[0]) & (loc_data['population'] <= rangevalue[1])]
+    d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     # d = gapminder[(gapminder['population'] >= rangevalue[0]) & (gapminder['population'] <= rangevalue[1])]
     for j in selected_cont:
             data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=cols)
     df=df.infer_objects()
-    scat_fig = px.scatter(data_frame=df, x="gdp_per_capita", y="suicides",
-                size="suicides", color="continent",hover_name="country",
+    scat_fig = px.scatter(data_frame=df, x="gdp_per_capita", y="sucid_in_hundredk",
+                size="sucid_in_hundredk", color="continent",hover_name="country",
                 # different colour for each country
                 color_discrete_map=color_discrete_map, 
-               #add frame by year to create animation grouped by country
-               animation_frame="year",animation_group="country",
-               #specify formating of markers and axes
-               log_x = True, size_max=60, range_x=[100,100000], range_y=[28,92],
+                #add frame by year to create animation grouped by country
+                animation_frame="year",animation_group="country",
+                #specify formating of markers and axes
+                # log_x = True, size_max=60, range_x=[100,100000], range_y=[28,92],
+                log_x = True, size_max=60, range_x=[100,100000], range_y=[28,92],
                 # change labels
                 labels={'population':'Population','year':'Year','continent':'Continent',
-                        'country':'Country','suicides':'Life Expectancy','gdp_per_capita':"GDP/Capita"})
+                        'country':'Country','suicides':'Suicide','gdp_per_capita':"GDP/Capita"})
     # Change the axis titles and add background colour using rgb syntax
     scat_fig.update_layout({'xaxis': {'title': {'text': 'log(GDP Per Capita)'}},
-                  'yaxis': {'title': {'text': 'Life Expectancy'}}}, 
+                  'yaxis': {'title': {'text': 'Suicide'}}}, 
                   plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
 
     return scat_fig
@@ -155,27 +156,27 @@ def update_graph(selected_cont,rangevalue):
 def update_map(selected_cont,rangevalue,yvar):
     if not (selected_cont or rangevalue or yvar):
         return dash.no_update
-    d = loc_data[(loc_data['population'] >= rangevalue[0]) & (loc_data['population'] <= rangevalue[1])]
+    d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     data =[]
     for j in selected_cont:
             data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
     map_fig= px.choropleth(df,locations="country_code", color=df[yvar],
-            hover_name="country",hover_data=['continent','population'],animation_frame="year",    
+            hover_name="country",hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
             color_continuous_scale='Turbo',range_color=[df[yvar].min(), df[yvar].max()],
-            labels={'population':'Population','year':'Year','continent':'Continent',
-                'country':'Country','suicides':'Life Expectancy'})
+            labels={'sucid_in_hundredk':'Suicide in hundredk','year':'Year','continent':'Continent',
+                'country':'Country','suicides':'Suicide'})
     map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
 
     line_fig = px.line(data_frame=df, 
                 x="year",  y = df[yvar] , color='continent',line_group="country", 
-                hover_data=['population','year'],
+                hover_data=['sucid_in_hundredk','year'],
                  # Add bold variable in hover information
                   hover_name='country',color_discrete_map=color_discrete_map,
                  # change labels
-                 labels={'population':'Population','year':'Year','continent':'Continent',
-                     'country':'Country','lifeExp':'Life Expectancy'})
+                 labels={'sucid_in_hundredk':'Population','year':'Year','continent':'Continent',
+                     'country':'Country','suicides':'Suicide'})
     line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
         paper_bgcolor='rgb(233, 238, 245)')
         

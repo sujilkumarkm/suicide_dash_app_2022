@@ -1,6 +1,5 @@
 
 # import dash
-from turtle import color
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 import plotly.express as px
@@ -18,13 +17,18 @@ df = pd.read_sql(query,mydb)
 columnss=list(df.columns)
 country_names = df['country'].unique()
 
-cont_names = df['continent'].unique()
-
 
 from app import app
 
-color_discrete_map = {'Asia': '#636EFA', 'Africa': '#EF553B', 'Americas': '#00CC96',
-    'Europe': '#AB63FA', 'Oceania': '#FFA15A'}
+{'Albania': '#000000', 'Austria': '#FFFF00', 'Belgium': '#1CE6FF',
+    'Bosnia and Herzegovina': '#FF34FF','Bulgaria': '#FF4A46', 'Croatia': '#008941',
+    'Czech Republic': '#006FA6', 'Denmark': '#A30059', 'Finland': '#FFDBE5',
+    'France': '#7A4900', 'Germany': '#0000A6', 'Greece': '#63FFAC', 'Hungary': '#B79762',
+    'Iceland': '#8FB0FF', 'Ireland': '#004D43','Italy': '#997D87', 'Montenegro': '#5A0007',
+    'Netherlands': '#809693', 'Norway': '#FEFFE6', 'Poland': '#1B4400','Portugal': '#4FC601',
+    'Romania': '#3B5DFF', 'Serbia': '#4A3B53', 'Slovak Republic': '#FF2F80',
+    'Slovenia': '#61615A','Spain': '#BA0900', 'Sweden': '#6B7900', 'Switzerland': '#00C2A0',
+    'Turkey': '#FFAA92','United Kingdom': '#FF90C9'}
 
 
 layout = html.Div([
@@ -54,14 +58,14 @@ layout = html.Div([
                                 html.Label('Select Suicide Range'),
                                 dcc.RangeSlider(id='suicides_slider',
                                     min=0,
-                                    max=1000,
-                                    value=[0,100],
+                                    max=180,
+                                    value=[0,180],
                                     step= 1,
                                     marks={
-                                        0: '1',
-                                        200: '200',
-                                        400: '400',
-                                        800: '800+',
+                                        0: '0',
+                                        50: '50',
+                                        100: '100',
+                                        178: '178',
                                     },
                                 )
                                 ]),
@@ -84,28 +88,16 @@ layout = html.Div([
             style={}),
 
 ################### End of second row #######################    
-
-            dbc.Row([
-                html.Label('Select Variable to display on the Graphs'),
-                dcc.Dropdown(id='y_dropdown',
-                    options=[
-                        {'label': 'Suicide', 'value': 'suicides'},
-                        {'label': 'Population', 'value': 'population'},
-                        {'label': 'GDP', 'value': 'gdp_per_capita'}],
-                    value='population'
-                )]),
             dbc.Row([
                  dbc.Col(html.Div(children=[
-                dcc.Graph(id="LifeExps")],className='mt-3 ml-3')
+                dcc.Graph(id="count_dist_graph")],className='mt-3 ml-3')
                 ,className='col-6 col-sm-6 col-md-6'),
                 dbc.Col(html.Div(children=[
-                    dcc.Graph(id="LifeExpOverTimes")],style={}, className='mt-3 mr-3')
+                    dcc.Graph(id="shot_graph")],style={}, className='mt-3 mr-3')
                     ,className='col-6 col-sm-6 col-md-6'),
-                    
             ], 
             className='text-center pt-2 pb-2',
             style={}),
-            
 
 ################### start of footer row #######################   
         
@@ -135,90 +127,57 @@ layout = html.Div([
     ]),
     ],className="pt-2")
 
-
 ])
 
-# @app.callback(
-#     [Output(component_id='distance_graph', component_property='figure'),
-#      Output(component_id='count_dist_graph', component_property='figure'),
-#      Output(component_id='shot_graph', component_property='figure'),
-#      Output(component_id='scat_graph', component_property='figure'),],
-#     [Input(component_id='country_drop', component_property='value'),
-#      Input(component_id='suicides_slider', component_property='value'),
-#      Input(component_id='y_dropdown', component_property='value'),
-#     ]
-# )
-# def update_line_chart(country_names, range_chosen, eur_yxx_dropdown):
-#     if not (country_names or range_chosen or eur_yxx_dropdown):
-#         return dash.no_update
-#     d = df[(df['suicides'] >= range_chosen[0]) & (df['suicides'] <= range_chosen[1])]
-#     data =[]
-#     for j in country_names:
-#             data.append(d[d['country'] == j])
-#     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
-#     dff=dff.infer_objects()
-#     mask = dff.country.isin(country_names)
-#     # fig = px.scatter(dff[mask], 
-#     # x="population", y="suicides", color="country", size='population',
-#     #              hover_name="sex", size_max=60)
-#     fig= px.choropleth(dff[mask],               
-#               locations="country_code", 
-#               color="suicides",
-#               hover_name="country",  
-#               animation_frame="year",
-#               title="World map of Suicides")
-#     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
-#         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-#         showlegend=False)
-
-#     mask2 = dff.country.isin(country_names)
-#     fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
-
-#     mask1 = dff.country.isin(country_names)
-#     # fig1 = px.bar(dff[mask1],x="country", y="population", color='population')
-#     fig1 = px.sunburst(dff[mask1], path=['sex', 'country', 'country_code'], values='suicides')
-
-#     mask3 = dff.country.isin(country_names)
-#     fig3 = px.scatter(dff[mask3],x="sucid_in_hundredk", y="population", color='sex')
-    
-#     return fig, fig1, fig2, fig3
-
-
-
-
 @app.callback(
-    [Output(component_id='LifeExps', component_property='figure'),
-    Output(component_id='LifeExpOverTimes', component_property='figure')],
+    [Output(component_id='distance_graph', component_property='figure'),
+     Output(component_id='count_dist_graph', component_property='figure'),
+     Output(component_id='shot_graph', component_property='figure'),
+     Output(component_id='scat_graph', component_property='figure'),],
     [Input(component_id='country_drop', component_property='value'),
      Input(component_id='suicides_slider', component_property='value'),
-     Input(component_id='y_dropdown', component_property='value')]
+    ]
 )
-def update_map(selected_cont,slider_val,yvar):
-    if not (selected_cont or slider_val or yvar):
+def update_line_chart(country_names, range_chosen):
+    if not (country_names or range_chosen):
         return dash.no_update
-    d = df[(df['suicides'] >= slider_val[0]) & (df['suicides'] <= slider_val[1])]
+    d = df[(df['sucid_in_hundredk'] >= range_chosen[0]) & (df['sucid_in_hundredk'] <= range_chosen[1])]
     data =[]
-    for j in selected_cont:
-            data.append(d[d['continent'] == j])
+    for j in country_names:
+            data.append(d[d['country'] == j])
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
-    map_fig= px.choropleth(dff,locations="country", color=dff[yvar],
-            hover_name="country",hover_data=['continent','population'],animation_frame="year",    
-            color_continuous_scale='Turbo',range_color=[dff[yvar].min(), dff[yvar].max()],
-            labels={'population':'Population','year':'Year','continent':'Continent',
-                'country':'Country','suicides':'Suicide'})
-    map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
+    mask = dff.country.isin(country_names)
+    # fig = px.scatter(dff[mask], 
+    # x="population", y="sucid_in_hundredk", color="country", size='population',
+    #              hover_name="sex", size_max=60)
+    fig= px.choropleth(dff[mask],               
+              locations="country_code", color="sucid_in_hundredk",
+              hover_name="country",  
+              animation_frame="year")
+    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
+        plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
+        showlegend=False)
+    mask2 = dff.country.isin(country_names)
+    fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
 
-    line_fig = px.line(data_frame=dff, 
-                x="year",  y = dff[yvar] , color='continent',line_group="country", 
-                hover_data=['population','year'],
-                 # Add bold variable in hover information
-                hover_name='country',color_discrete_map=color_discrete_map,
-                 # change labels
-                labels={'population':'Population','year':'Year','continent':'Continent',
-                     'country':'Country','suicides':'Total Suicides'})
-    line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
-        paper_bgcolor='rgb(233, 238, 245)')
-        
-    return [map_fig, line_fig]
+    mask1 = dff.country.isin(country_names)
+    # fig1 = px.bar(dff[mask1],x="country", y="population", color='population')
+    fig1 = px.sunburst(dff[mask1], path=['sex', 'country', 'country_code'], values='suicides')
+
+    # fig3 = px.scatter(dff[mask3],x="sucid_in_hundredk", y="population", color='sex')
+    dfff=dff.groupby(["country"], as_index=False)[["sucid_in_hundredk","gdp_per_capita"]].mean()
+    mask3 = dfff.country.isin(country_names)
+
+    fig3 = px.scatter(
+            data_frame=dfff[mask3],
+            x="sucid_in_hundredk",
+            y="gdp_per_capita",
+            hover_data=['country'],
+            text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita",})
+    return [fig, fig1, fig3, fig2]
+
+
+
+
 
