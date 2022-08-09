@@ -10,11 +10,16 @@ import pandas as pd
 import numpy as np
 from dash import Dash, dash_table
 from app import app
+import mysql.connector as connection
 
+#data for the Suicide plots
+mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
+query = "Select * from suicides;"
+df = pd.read_sql(query,mydb)
 
 #data for the Suicide plots
 #data for the region plot
-df = pd.read_csv('assets/cleaned_data1.csv')
+# df = pd.read_csv('assets/cleaned_data1.csv')
 dat_columns = df.columns
 
 
@@ -44,7 +49,7 @@ layout = html.Div([
                 # Start on the first page
                 page_current=0,
                 # Render 7 items per page
-                page_size=5,
+                page_size=10,
                 ),
     
         ],style={

@@ -4,8 +4,7 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
-
-from gapminder import gapminder
+import dash_bootstrap_components as dbc
 import mysql.connector as connection
 import plotly.express as px
 import pandas as pd
@@ -37,7 +36,7 @@ colors = {
     #background to rgb(233, 238, 245)
     'background': '#303030 !important',
     'text': '#ffffff'
-}
+} 
 color_discrete_map = {'Asia': '#636EFA', 'Africa': '#EF553B', 'Americas': '#00CC96',
     'Europe': '#AB63FA', 'Oceania': '#FFA15A'}
 
@@ -59,57 +58,103 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
     ),
     html.Div([
         html.Div([
-            html.Label('Select Continent/Continents'),
-            dcc.Dropdown(id='cont_dropdown',
-                        options=[{'label': i, 'value': i}
-                                for i in cont_names],
-                        value=['Asia','Europe','Africa','Americas','Oceania'],
-                        multi=True
-            )
-        ],style={'width': '49%', 'display': 'inline-block'}),
-        html.Div([
-            html.Label('Select Population Range'),
-                dcc.RangeSlider(id='pop_range',
-                min=0,
-                max=180,
-                value=[0,180],
-                step= 1,
-                marks={
-                    0: '0',
-                    50: '50',
-                    100: '100',
-                    178: '178',
-                },
-                )
-        ],style={'width': '49%', 'float': 'right', 'display': 'inline-block'}),
-    ]),
-    dcc.Graph(
-        id='LifeExpVsGDP'
-    ),
-    html.Label('Select Variable to display on Graphs'),
-        dcc.Dropdown(id='y_dropdown',
-            options=[                    
-                {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
-                {'label': 'Population', 'value': 'population'},
-                {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
-            value='sucid_in_hundredk',
-            style={'width':'50%'}
-    ),
-    html.Div([
-        html.Div([
-            dcc.Graph(
-                id='LifeExp'
-            )
-        ],style={'width': '49%', 'display': 'inline-block'}),
-        html.Div([
-            dcc.Graph(
-                id='LifeExpOverTime',
-            )
-        ],style={'width': '49%', 'float': 'right', 'display': 'inline-block'}),
-    ])
+
+            ################### start of first row #######################   
+                html.H1('Suicide Statistics Countrywise',
+                style={
+                    'textAlign': 'center',
+                    'color': '#00000',
+                    }
+                    ),
+                dbc.Row(children=[
+                    dbc.Col(children=[
+                    html.Label('Select Continent'),
+                    dcc.Dropdown(id='cont_dropdown',
+                                options=[{'label': i, 'value': i}
+                                        for i in cont_names],
+                                value=cont_names,
+                                multi=True,
+                                style={
+                                    # 'textAlign': 'center',
+                                    'color': '#1c1818',
+                                }
+                    )
+                    ], className='ml-2 mb-2'),  
+                        dbc.Col(dbc.Col(children=[
+                                html.Label('Select Suicide Range'),
+                             dcc.RangeSlider(id='pop_range',
+                                min=0,
+                                max=180,
+                                value=[0,180],
+                                step= 1,
+                                marks={
+                                    0: '0',
+                                    50: '50',
+                                    100: '100',
+                                    178: '178',
+                                },
+                                )
+                                ], className='ml-2 mb-2'),
+                        ),
+                    ]),
+
+        
+        ]),
+            ################### End of first row #######################  
+                dbc.Row([
+                dbc.Col(html.Div(children=
+                    [
+                        dcc.Graph(id='LifeExpVsGDP'),               
+                    ],),className='col-12 col-sm-12 col-md-12 mr-3 mt-3'),
+
+            ], 
+            className='text-center pt-2 pb-2',
+            style={}),
+
+            ################### End of second row #######################    
+                dbc.Row([
+                dbc.Col(html.Div(children=
+                    [
+                        dcc.Dropdown(id='y_dropdown',
+                        options=[                    
+                            {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
+                            {'label': 'Population', 'value': 'population'},
+                            {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
+                        value='sucid_in_hundredk',
+                        style={'width':'50%'}
+                        ),               
+                    ],className='ml-3 mr-3 mt-3'),className='col-12 col-sm-12 col-md-12'),
+
+            ], 
+            className='text-center pb-3',
+            style={}),
+
+            ################### End of third row #######################   
+                    dbc.Row([
+                        dbc.Col(html.Div(children=
+                            [
+                                html.Div([
+                                    dcc.Graph(id='LifeExp')
+                                    ],className=' mr-3 ml-3',
+                                    style={}),    
+                            ]),className='col-6 col-sm-6 col-md-6'),
+
+                       
+                        dbc.Col(html.Div(children=
+                            [
+                                html.Div([
+                                    dcc.Graph(id='LifeExpOverTime',)
+                                    ],className=' mr-3 ml-3',
+                                    style={}),    
+                            ]),className='col-6 col-sm-6 col-md-6'),
+
+                         ],className='text-center pb-3',style={}),
+
+            ################### End of fourth row #######################         
+
 
 ])
-
+])
 @app.callback(
     Output(component_id='LifeExpVsGDP', component_property='figure'),
     [Input(component_id='cont_dropdown', component_property='value'),
