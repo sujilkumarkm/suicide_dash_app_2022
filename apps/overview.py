@@ -104,12 +104,22 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                 dbc.Row([
                 dbc.Col(html.Div(children=
                     [
-                        dcc.Graph(id='LifeExpVsGDP'),               
-                    ],),className='col-12 col-sm-12 col-md-12 mr-3 mt-3'),
+                        dcc.Graph(id='LifeExpVsGDP',
+                        responsive=True,
+                        style={
+                            "width": "100%",
+                            "height": "100%",
+                        },),               
+                    ],className=''),className='col-11 col-sm-11 col-md-11 mr-3 mt-3'),
 
-            ], 
-            className='text-center pt-2 pb-2',
-            style={}),
+                ],className='pt-2 pb-2',
+                    style={"width": "100%",
+                    "height": "500px",
+                    "display": "inline-block",
+                    "padding-left": "15px",
+                    "padding-right": "15px",
+                    "overflow": "hidden",
+                    "align":"center"}),
 
             ################### End of second row #######################    
                 dbc.Row([
@@ -121,9 +131,10 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
                         value='sucid_in_hundredk',
-                        style={'width':'50%'}
+                        style={'width':'50%',
+                               'color': '#1c1818',},
                         ),               
-                    ],className='ml-3 mr-3 mt-3'),className='col-12 col-sm-12 col-md-12'),
+                    ],className='ml-3 mr-3 mt-3'),className='col-11 col-sm-12 col-md-12'),
 
             ], 
             className='text-center pb-3',
