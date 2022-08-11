@@ -16,8 +16,8 @@ dropdown = dbc.DropdownMenu(
     children=[
         # dcc.Link("Game", href="/apps/game"),
         dbc.DropdownMenuItem("Dashboard", href="/dashboard"),
-        dbc.DropdownMenuItem("Forecast Model", href="/forecast1"),
         dbc.DropdownMenuItem("Overview", href="/overview"),
+        dbc.DropdownMenuItem("Forecast Model", href="/forecast1"),
         dbc.DropdownMenuItem("Data View", href="/data"),
     ],
     nav = True,
@@ -104,10 +104,10 @@ def display_page(pathname):
         return policy.layout
     elif pathname == '/dashboard':
         return dashboard.layout
-    elif pathname == '/forecast1':
-        return forecast1.layout
     elif pathname == '/overview':
         return overview.layout
+    elif pathname == '/forecast1':
+        return forecast1.layout
     elif pathname == '/data':
         return data.layout
     

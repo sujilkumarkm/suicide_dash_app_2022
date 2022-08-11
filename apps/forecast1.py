@@ -39,15 +39,67 @@ layout = html.Div([
                     'color': '#00000',
                     }
                     ),
+
+                    ################### begining of first row #######################    
+
+
+
+
+
+                ################### End of first row #######################
                 dbc.Row(children=[
-                    dbc.Col(children=[
-                    html.Label('Select Countries'),
                     dbc.Col(html.Div(children=[
-                    dcc.Graph(id="distance_graphssss")],className='ml-3 mt-3')
-                    ,className='col-6 col-sm-6 col-md-6'),
-                    ], className='ml-2 mb-2'),  
+                            dcc.Graph(id="distance_graphssss")
+                        ],className='ml-3 mt-3')
+                        ,className='col-6 col-sm-6 col-md-6'),
+                    dbc.Col(html.Div(children=
+                        [
+                            html.Label('Select Prediction variable', className=""),
+                                                      dcc.Dropdown(id='y_dropdown',
+                            options=[                    
+                                {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
+                                {'label': 'Population', 'value': 'population'},
+                                {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
+                            value='sucid_in_hundredk',
+                            style={'width':'50%',
+                                'color': '#1c1818',},
+                            ), 
+                            html.Label('Select from year', className="pt-2"),
+                            dcc.RangeSlider(id='from_range',
+                                min=0,
+                                max=180,
+                                value=[0,180],
+                                step= 1,
+                                marks={
+                                    0: '0',
+                                    50: '50',
+                                    100: '100',
+                                    178: '178',
+                                },
+                            ),
+                            html.Label('Select to year'),
+                            dcc.RangeSlider(id='to_range',
+                                min=0,
+                                max=180,
+                                value=[0,180],
+                                step= 1,
+                                marks={
+                                    0: '0',
+                                    50: '50',
+                                    100: '100',
+                                    178: '178',
+                                },
+                            ),
+                        ]
+                        )),
+                    # dbc.Col(html.Div(children=
+                    #     [
+                
+                    #     ],className='mt-3'),className='col-6 col-sm-6 col-md-6'),
+ 
 
                     ]),
+
 
 
 
