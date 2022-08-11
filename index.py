@@ -108,8 +108,8 @@ def display_page(pathname):
         return forecast1.layout
     elif pathname == '/overview':
         return overview.layout
-    # elif pathname == '/data':
-    #     return data.layout
+    elif pathname == '/data':
+        return data.layout
     
     else:
         return home.layout
