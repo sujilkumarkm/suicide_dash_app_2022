@@ -54,17 +54,17 @@ layout = html.Div([
                         ,className='col-6 col-sm-6 col-md-6'),
                     dbc.Col(html.Div(children=
                         [
-                            html.Label('Select Prediction variable', className=""),
+                            html.Label('Select Prediction variable', className="pt-4 pb-4"),
                                                       dcc.Dropdown(id='y_dropdown',
                             options=[                    
                                 {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
                                 {'label': 'Population', 'value': 'population'},
                                 {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
                             value='sucid_in_hundredk',
-                            style={'width':'50%',
+                            style={'width':'70%',
                                 'color': '#1c1818',},
                             ), 
-                            html.Label('Select from year', className="pt-2"),
+                            html.Label('Select from year', className="pt-4"),
                             dcc.RangeSlider(id='from_range',
                                 min=0,
                                 max=180,
@@ -90,7 +90,7 @@ layout = html.Div([
                                     178: '178',
                                 },
                             ),
-                        ]
+                        ], className="pt-2 pb-2"
                         )),
                     # dbc.Col(html.Div(children=
                     #     [
