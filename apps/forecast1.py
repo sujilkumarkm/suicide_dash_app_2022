@@ -1,4 +1,3 @@
-
 # import dash
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
@@ -7,135 +6,167 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from pytz import country_names
-import mysql.connector as connection
+
 
 #data for the Suicide plots
-mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
-query = "Select * from suicides;"
-df = pd.read_sql(query,mydb)
-# df = df.iloc[10:1000]
+df = pd.read_csv("assets/processed_data/output.csv")
+countries = list(set(df.country.to_list()))
 columnss=list(df.columns)
 country_names = df['country'].unique()
 
 
 from app import app
 
-{'Albania': '#000000', 'Austria': '#FFFF00', 'Belgium': '#1CE6FF',
-    'Bosnia and Herzegovina': '#FF34FF','Bulgaria': '#FF4A46', 'Croatia': '#008941',
-    'Czech Republic': '#006FA6', 'Denmark': '#A30059', 'Finland': '#FFDBE5',
-    'France': '#7A4900', 'Germany': '#0000A6', 'Greece': '#63FFAC', 'Hungary': '#B79762',
-    'Iceland': '#8FB0FF', 'Ireland': '#004D43','Italy': '#997D87', 'Montenegro': '#5A0007',
-    'Netherlands': '#809693', 'Norway': '#FEFFE6', 'Poland': '#1B4400','Portugal': '#4FC601',
-    'Romania': '#3B5DFF', 'Serbia': '#4A3B53', 'Slovak Republic': '#FF2F80',
-    'Slovenia': '#61615A','Spain': '#BA0900', 'Sweden': '#6B7900', 'Switzerland': '#00C2A0',
-    'Turkey': '#FFAA92','United Kingdom': '#FF90C9'}
-
 
 layout = html.Div([
 ################### start of first row #######################   
-                html.H5('Suicide Statistics Countrywise',
+                html.H5('Suicide Forecast Countrywise',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',
                     }
                     ),
 
-                    ################### begining of first row #######################    
-
-
-
-
-
-                ################### End of first row #######################
                 dbc.Row(children=[
+
+
                     dbc.Col(html.Div(children=[
                             dcc.Graph(id="distance_graphssss")
                         ],className='ml-3 mt-3')
                         ,className='col-6 col-sm-6 col-md-6'),
+
+
+
                     dbc.Col(html.Div(children=
                         [
-                            html.Label('Select Prediction variable', className="pt-4 pb-4"),
-                                                      dcc.Dropdown(id='y_dropdown',
-                            options=[                    
-                                {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
-                                {'label': 'Population', 'value': 'population'},
-                                {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
-                            value='sucid_in_hundredk',
+                            html.Label('Select Country', className="pt-4 pb-4"),
+
+                            ## drop down start    
+
+                                                      dcc.Dropdown(id='country_dropdown',
+                            options=countries,
+
+                            value=countries[0],
                             style={'width':'70%',
                                 'color': '#1c1818',},
-                            ), 
-                            html.Label('Select from year', className="pt-4"),
-                            dcc.RangeSlider(id='from_range',
-                                min=0,
-                                max=180,
-                                value=[0,180],
+                            ),
+
+
+                            html.Label('Select Forecasting Model', className="pt-4 pb-4"),
+
+                            ## drop down start    
+
+                                                      dcc.Dropdown(id='model_dropdown',
+                            options=[
+
+                                ##
+
+                                #{'label': 'fbprophet', 'value': 'fbprophet'},
+                                {'label': 'sarimax', 'value': 'sarimax'},
+                                {'label': 'custom AR', 'value': 'AR'}],
+
+
+                            value='sarimax',
+                            style={'width':'70%',
+                                'color': '#1c1818',},
+                            ),
+
+
+                            ## drop down ended
+
+
+                            html.Label('Years', className="pt-4"),
+                            dcc.RangeSlider(id='year_range',
+                                min=1995,
+                                max=2035,
+                                value=[1995,2035],
                                 step= 1,
                                 marks={
-                                    0: '0',
-                                    50: '50',
-                                    100: '100',
-                                    178: '178',
+                                    1995: '1995',
+                                    1998: '1998',
+                                    2001: '2001',
+                                    2004: '2004',
+                                    2007: '2007',
+                                    2010: '2010',
+                                    2013: '2013',
+                                    2016: '2016',
+                                    2019: '2019',
+                                    2022: '2022',
+                                    2025: '2025',
+                                    2028: '2028',
+                                    2031: '2031',
+                                    2034: '2034',
+                                    # 2035: '2035',
                                 },
                             ),
-                            html.Label('Select to year'),
-                            dcc.RangeSlider(id='to_range',
-                                min=0,
-                                max=180,
-                                value=[0,180],
-                                step= 1,
-                                marks={
-                                    0: '0',
-                                    50: '50',
-                                    100: '100',
-                                    178: '178',
-                                },
-                            ),
+                         
                         ], className="pt-2 pb-2"
-                        )),
-                    # dbc.Col(html.Div(children=
-                    #     [
-                
-                    #     ],className='mt-3'),className='col-6 col-sm-6 col-md-6'),
- 
+                        )), 
 
                     ]),
-
-
-
 
 ])
 
 @app.callback(
-    [Output(component_id='distance_graphssss', component_property='figure'),
-     
-    
+    [
+        Output(component_id='distance_graphssss', component_property='figure'),
      ],
-    [Input(component_id='country_drop', component_property='value'),
-     Input(component_id='suicides_slider', component_property='value'),
+    [
+        Input(component_id='country_dropdown', component_property='value'),
+        Input(component_id='model_dropdown', component_property='value'),
+        Input(component_id='year_range', component_property='value'),
     ]
 )
-def update_line_chart(country_names, range_chosen):
-    if not (country_names or range_chosen):
+def update_line_chart(country_dropdown, model_dropdown, year_range):
+    if not (country_dropdown or model_dropdown or year_range):
         return dash.no_update
-    d = df[(df['sucid_in_hundredk'] >= range_chosen[0]) & (df['sucid_in_hundredk'] <= range_chosen[1])]
-    data =[]
-    for j in country_names:
-            data.append(d[d['country'] == j])
-    dff = pd.DataFrame(np.concatenate(data), columns=columnss)
-    dff=dff.infer_objects()
-    mask = dff.country.isin(country_names)
-    # fig = px.scatter(dff[mask], 
-    # x="population", y="sucid_in_hundredk", color="country", size='population',
-    #              hover_name="sex", size_max=60)
-    mask3 = dfff.country.isin(country_names)
+    possible_years = [str(y) for y in range(year_range[0], year_range[1])]
 
+    data = pd.read_csv("assets/processed_data/country_wise/data/"+country_dropdown+".csv")
+    forecasted = pd.read_csv("assets/processed_data/country_wise/forecasted/"+country_dropdown+".csv")
+    
+    data["year_of_forecast"] = data.year.apply(lambda x: str(x).split("-")[0])
+    forecasted["year_of_forecast"] = forecasted.year.apply(lambda x: str(x).split("-")[0])
+
+    new_df = pd.DataFrame()
+    new_df["year_of_forecast"] = possible_years
+
+    new_df = pd.merge(new_df,data, on = "year_of_forecast", how = "left")
+    new_df = pd.merge(new_df,forecasted, on = "year_of_forecast", how = "left")
+
+    
+
+    
     fig3 = px.scatter(
-            data_frame=dfff[mask3],
-            x="sucid_in_hundredk",
-            y="gdp_per_capita",
-            hover_data=['country'],
-            text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita",})
-    return [fig3]
+            data_frame=new_df,
+            y="sucid_in_hundredk"+"_"+model_dropdown,
+            x="year_of_forecast",
+            color = "sucid_in_hundredk",
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+
+    fig4 = px.line(
+            data_frame=new_df,
+            y="sucid_in_hundredk"+"_"+model_dropdown,
+            x="year_of_forecast",
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+
+    fig5 = px.scatter(
+            data_frame=new_df,
+            y="sucid_in_hundredk",
+            x="year_of_forecast",
+            color = "sucid_in_hundredk",
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+
+    fig6 = px.line(
+            data_frame=new_df,
+            y="sucid_in_hundredk",
+            x="year_of_forecast",
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+
+    fig7 = go.Figure(data=fig3.data + fig4.data + fig5.data + fig6.data)
+
+    return [fig7]
+
 
 
 

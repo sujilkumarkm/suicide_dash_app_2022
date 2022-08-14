@@ -17,7 +17,7 @@ dropdown = dbc.DropdownMenu(
         # dcc.Link("Game", href="/apps/game"),
         dbc.DropdownMenuItem("Dashboard", href="/dashboard"),
         dbc.DropdownMenuItem("Overview", href="/overview"),
-        dbc.DropdownMenuItem("Forecast Model", href="/forecast1"),
+        dbc.DropdownMenuItem("Forecast", href="/forecast1"),
         dbc.DropdownMenuItem("Data View", href="/data"),
     ],
     nav = True,
