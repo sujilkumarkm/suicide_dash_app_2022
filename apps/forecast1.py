@@ -75,11 +75,11 @@ layout = html.Div([
                             ## drop down ended
 
 
-                            html.Label('Years', className="pt-4"),
+                            html.Label('Years', className="pt-3"),
                             dcc.RangeSlider(id='year_range',
                                 min=1995,
                                 max=2035,
-                                value=[1995,2035],
+                                value=[1995,2025],
                                 step= 1,
                                 marks={
                                     1995: '1995',

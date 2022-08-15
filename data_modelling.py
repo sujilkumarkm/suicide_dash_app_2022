@@ -6,12 +6,14 @@ from pandas import read_csv
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 import datetime
-
+from prophet import Prophet
 from sklearn.metrics import mean_squared_error
 import dateutil.parser # for handling the conversion of datetime formats
 from datetime import timedelta # for operating the datetime objects
 from statsmodels.tsa. statespace.sarimax import SARIMAX
-
+from statsmodels.tools.eval_measures import rmse
+from tqdm import tqdm
+from os import system, name
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -96,6 +98,12 @@ def is_leap_year(year):
     else:
         return False
 
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+        
 def forecasted_series_to_df(series, forecasted_series_, npast_year, name_of_forecasted_column, name_of_datetime_index_column):
   forecasted_series = forecasted_series_.copy()
   y = 0
@@ -221,6 +229,29 @@ def forecast(country,npast_year = 0, nforecast_year = 5):
             forcasted_final.extend(forecasted_1[parameter_to_forecast].to_list())
             
             
+            data_fbp = series.copy()
+            data_fbp["year"] = data_fbp.index
+            data_fbp.columns = ['y','ds']
+            data_fbp['ds'] = pd.to_datetime(data_fbp['ds'])
+            train = data_fbp.iloc[:len(data_fbp)-int(len(data_fbp)*0.25)]
+            test = data_fbp.iloc[len(data_fbp)-int(len(data_fbp)*0.25)+1:]
+            m = Prophet(interval_width = 0.80)
+            m.fit(data_fbp)
+            future = m.make_future_dataframe(periods=15, freq = "Y", include_history = "False") 
+            forecast = m.predict(future)
+            res = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+            forcecast_fbf = [actual.to_list()[-1]]
+            temp_ls = forecast['yhat'].to_list()[len(data_fbp):]
+            
+            forcecast_fbf.extend(temp_ls)
+            forcecast_fbf = pd.Series(forcecast_fbf, copy=False)
+            to_plot_fbf=forecasted_series_to_df(series[parameter_to_forecast], forcecast_fbf, npast_year, str(parameter_to_forecast), "year")
+
+            # Model evaluation for prophet
+            predictions = forecast.iloc[-len(test):]['yhat']
+            #print("Root Mean Squared Error between actual and  predicted values: ",rmse(predictions,test['y']), "--> ",int(rmse(predictions,test['y'])*10000/test['y'].mean())/100," %")
+
+
             mean_forecast_sarima = forecasts.predicted_mean
 
             forcasted_final_sarima = [actual.to_list()[-1]]
@@ -233,10 +264,11 @@ def forecast(country,npast_year = 0, nforecast_year = 5):
             to_plot[parameter_to_forecast+"_sarimax"] = to_plot[parameter_to_forecast]
             to_plot[parameter_to_forecast+"_AR"] = forcasted_final
             to_plot=to_plot.drop([parameter_to_forecast], axis = 1)
-
+            to_plot[parameter_to_forecast+"_fbprophet"] = to_plot_fbf[parameter_to_forecast]
+            
             to_plot[parameter_to_forecast+"_sarimax"] = to_plot[parameter_to_forecast+"_sarimax"].apply(lambda x: int(x*100)/100)
             to_plot[parameter_to_forecast+"_AR"] = to_plot[parameter_to_forecast+"_AR"].apply(lambda x: int(x*100)/100)
-
+            to_plot[parameter_to_forecast+"_fbprophet"] = to_plot[parameter_to_forecast+"_fbprophet"].apply(lambda x: int(x*100)/100)
 
             if first_time:
                 first_time = False
@@ -252,9 +284,8 @@ def forecast(country,npast_year = 0, nforecast_year = 5):
     temp.to_csv('assets/processed_data/country_wise/forecasted/'+str(country)+'.csv')
 
     return temp, series
-
-
-for i, country in enumerate(countries):
-
+clear()
+for i in tqdm (range (len(countries)), desc="Generating forecasted data files.."):
+    country = countries[i]
     to_plot, series = forecast(country = country, npast_year = 0, nforecast_year = 15)
-    print("Progress: ",int(i*10000/len(countries))/100,"%")
+    clear()
