@@ -7,15 +7,6 @@ import numpy as np
 import scipy.stats as stats
 import plotly.express as px
 
-### Outlier detection and removal
-# getting nearest neighbors using knn
-# outlier library import
-from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
-from sklearn.preprocessing import StandardScaler
-
-nearestn=NearestNeighbors(n_neighbors=2)
-
 df_cont = pd.read_csv("assets/data/countryContinent.csv", encoding="ISO-8859-1")
 url = 'assets/data/suicide_moredata.csv'
 second_data = pd.read_csv(url)
@@ -102,51 +93,6 @@ final.loc[ final['physician_price'] == 0 | np.isnan(final['physician_price']), '
 final.loc[:, 'expenses':'refugees'] = final.loc[:, 'expenses':'refugees'].fillna(final['employeecompensation'].mean()) 
 
 
-
-outlier_threshold = 0.85
-
-for_DBSCAN = final.copy()
-
-#getting numerical columns
-num_df = for_DBSCAN._get_numeric_data()
-num_df = num_df.drop(["year"], axis = 1)
-X = StandardScaler().fit_transform(num_df)
-
-
-# outlier removal function
-print("nunber of records: ",len(X))
-temp = X.copy()
-nbrs=nearestn.fit(temp)
-distances,indices=nbrs.kneighbors(temp)
-distances=np.sort(distances,axis=0)
-distances=distances[:,1]
-
-db = DBSCAN(eps=outlier_threshold, min_samples=3)
-
-db.fit(temp)
-
-for_DBSCAN["clusters"]=db.labels_
-outliers_indexes=for_DBSCAN.loc[for_DBSCAN.clusters==-1].index
-print("Total ",len(outliers_indexes)," are outliers")
-
-core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-core_samples_mask[db.core_sample_indices_] = True
-labels = db.labels_
-
-# Number of clusters in labels, ignoring noise if present.
-n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-n_noise_ = list(labels).count(-1)
-
-print("Estimated number of clusters: %d" % n_clusters_)
-print("Estimated number of noise points: %d" % n_noise_)
-
-for_DBSCAN=for_DBSCAN.drop(outliers_indexes,axis=0)
-for_DBSCAN=for_DBSCAN.drop("clusters",axis=1)
-
-print("Before removing outliers, total number of records: ", len(final))
-final=final.drop(outliers_indexes,axis=0)
-print("After removing outliers, total number of records: ", len(final))
-print("#"*40)
 
 final.to_csv('assets/processed_data/output.csv',mode = 'w', index=False)
 print("File saved successfully!!!")

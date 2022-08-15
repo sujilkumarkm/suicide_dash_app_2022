@@ -1,3 +1,4 @@
+
 # import dash
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
@@ -10,7 +11,9 @@ from pytz import country_names
 
 #data for the Suicide plots
 df = pd.read_csv("assets/processed_data/output.csv")
-countries = list(set(df.country.to_list()))
+errors = pd.read_csv("assets/processed_data/error.csv")
+#errors.index = errors.country
+countries = list(set(errors.country.to_list()))
 columnss=list(df.columns)
 country_names = df['country'].unique()
 
@@ -75,11 +78,11 @@ layout = html.Div([
                             ## drop down ended
 
 
-                            html.Label('Years', className="pt-3"),
+                            html.Label('Years', className="pt-4"),
                             dcc.RangeSlider(id='year_range',
                                 min=1995,
                                 max=2035,
-                                value=[1995,2025],
+                                value=[1995,2035],
                                 step= 1,
                                 marks={
                                     1995: '1995',
@@ -117,6 +120,8 @@ layout = html.Div([
         Input(component_id='year_range', component_property='value'),
     ]
 )
+
+
 def update_line_chart(country_dropdown, model_dropdown, year_range):
     if not (country_dropdown or model_dropdown or year_range):
         return dash.no_update
@@ -127,46 +132,64 @@ def update_line_chart(country_dropdown, model_dropdown, year_range):
     
     data["year_of_forecast"] = data.year.apply(lambda x: str(x).split("-")[0])
     forecasted["year_of_forecast"] = forecasted.year.apply(lambda x: str(x).split("-")[0])
-
+    forecasted["forecasted"] = "Forcasted"
     new_df = pd.DataFrame()
     new_df["year_of_forecast"] = possible_years
 
     new_df = pd.merge(new_df,data, on = "year_of_forecast", how = "left")
     new_df = pd.merge(new_df,forecasted, on = "year_of_forecast", how = "left")
 
+    forcasted_label = []
+    for i in new_df.forecasted.to_list():
+        if i == "Forcasted":
+            forcasted_label.append("Forecasted Values")
+        else:
+            forcasted_label.append("Known Values")
+    new_df["forecasted"] = forcasted_label
     
 
+    error = int(100*errors[errors.country == country_dropdown][model_dropdown].to_list()[0])/100
     
     fig3 = px.scatter(
             data_frame=new_df,
             y="sucid_in_hundredk"+"_"+model_dropdown,
             x="year_of_forecast",
-            color = "sucid_in_hundredk",
-            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+            color = "forecasted",
+            labels={"sucid_in_hundredk"+"_"+model_dropdown: "Suicide per hundred thousand","year_of_forecast": "Year",})
 
     fig4 = px.line(
             data_frame=new_df,
             y="sucid_in_hundredk"+"_"+model_dropdown,
             x="year_of_forecast",
-            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+            labels={"sucid_in_hundredk"+"_"+model_dropdown: "Suicide per hundred thousand","year_of_forecast": "Year",})
 
     fig5 = px.scatter(
             data_frame=new_df,
             y="sucid_in_hundredk",
             x="year_of_forecast",
-            color = "sucid_in_hundredk",
-            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year_of_forecast": "Year",})
 
     fig6 = px.line(
             data_frame=new_df,
             y="sucid_in_hundredk",
             x="year_of_forecast",
-            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year": "Year",})
+            labels={"sucid_in_hundredk": "Suicide per hundred thousand","year_of_forecast": "Year",})
 
     fig7 = go.Figure(data=fig3.data + fig4.data + fig5.data + fig6.data)
 
-    return [fig7]
+    fig7.update_layout(
+    title=model_dropdown+" Model with RMSE: "+str(error),
+    xaxis_title="Year",
+    yaxis_title="Suicide per hundred thousand",
+    
+    font=dict(
+        family="Courier New, monospace",
+        size=12,
+        color="RebeccaPurple"
+        )
+    )
 
+    return [fig7]
 
 
 
