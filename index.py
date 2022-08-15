@@ -120,4 +120,4 @@ def display_page(pathname):
 if __name__ != '__main__':
     pass
 else:
-    app.run_server(port=8000, debug=True)
+    app.run_server(port=8000, debug=False)
