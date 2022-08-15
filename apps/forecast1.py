@@ -61,7 +61,7 @@ layout = html.Div([
 
                                 ##
 
-                                #{'label': 'fbprophet', 'value': 'fbprophet'},
+                                {'label': 'fbprophet', 'value': 'fbprophet'},
                                 {'label': 'sarimax', 'value': 'sarimax'},
                                 {'label': 'custom AR', 'value': 'AR'}],
 
