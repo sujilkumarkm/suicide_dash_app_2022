@@ -3,4 +3,3 @@ venv
 .DS_Store
 .env
 # index.py
-ireland_counties.geojson
