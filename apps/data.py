@@ -13,9 +13,12 @@ from app import app
 import mysql.connector as connection
 
 #data for the Suicide plots
-mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
-query = "Select * from suicides;"
-df = pd.read_sql(query,mydb)
+# mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
+# query = "Select * from suicides;"
+# df = pd.read_sql(query,mydb)
+
+loc_data = pd.read_csv("assets/processed_data/output.csv")
+df = loc_data
 
 #data for the Suicide plots
 #data for the region plot

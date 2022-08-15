@@ -11,14 +11,12 @@ import pandas as pd
 import numpy as np
 
 
-
-#get unique continents
-# cont_names = gapminder['continent'].unique()
-#data for the region plot
 #data for the Suicide plots
-mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
-query = "Select * from suicides;"
-loc_data = pd.read_sql(query,mydb)
+# mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
+# query = "Select * from suicides;"
+# loc_data = pd.read_sql(query,mydb)
+loc_data = pd.read_csv("assets/processed_data/output.csv")
+df = loc_data
 df = loc_data
 loc_cols=list(loc_data.columns)
 cols=list(loc_data.columns)
