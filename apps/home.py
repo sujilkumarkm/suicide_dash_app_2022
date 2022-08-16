@@ -7,7 +7,7 @@ from app import app
 layout = html.Div([
     dbc.Container([
                 dbc.Row([
-           dbc.Col(dbc.CardImg(src=app.get_asset_url('wall_paper.jpg'), className = 'text-center'),
+           dbc.Col(dbc.CardImg(src=app.get_asset_url('wall_paper.png'), className = 'text-center'),
             style={"maxWidth": "100%"})
         ]),
         dbc.Row([
@@ -36,10 +36,11 @@ layout = html.Div([
                                              dbc.Col(html.H5(children='Motivated, teamwork-oriented, and responsible Data Analyst with       significant experience in increasıng Comprehension of report and presentations by the average professional. Highly educated, possessing a Bachelors, a Masters, and 6 years professional         experience in IT. Bilingual in English, Malayalam, and Tamil, with an intermediate understanding of Hindi'
                 )
                                      , className="mb-5",style={"minHeight": "100px"}),
-                                    dbc.Button("Connect  Sujil Kumar K.M",
+                                    html.Div(dbc.Button("Connect  Sujil Kumar K.M",
                                     href="https://www.linkedin.com/in/sujil/", target="_blank",
                                     # color="primary",
-                                    className="mt-3 btn btn-danger"),
+                                    className="mt-3 btn-primary text-center"),
+                                    className="d-flex justify-content-center"),
                                     
                                        ],
                              
@@ -48,17 +49,17 @@ layout = html.Div([
 
             dbc.Col(dbc.Card(children=[html.H3(children='About DKIT',
                                                className="text-center"),
-                                       dbc.Col(html.H5(children='Dundalk Institute of Technology is an institute of technology based in Dundalk within country Louth, Ireland. Created as Dundalk Regional Technical College, students were first enrolled in the college in 1971 and was later re-defined as an institute of technology in January, 1998.'
+                                       dbc.Col(html.H5(children='Dundalk Institute of Technology is an institute of technology based in Dundalk within country Louth, Ireland. Created as Dundalk Regional Technical College, students were first enrolled in the college in 1971 and was later re-defined as an institute of technology in January, 1998.The Institute has four schools, with each one consisting of a number of departments.'
                 )
                                      , className="mb-5",style={"minHeight": "100px"}),
-                                       dbc.Button("Dundalk Institute of Technology (DKIT)",
+                                       html.Div(dbc.Button("Dundalk Institute of Technology (DKIT)",
                                                   href="https://dkit.ie", target="_blank",
-                                                  color="primary",
-                                                  className="mt-3 btn btn-success"),
+                                                #   color="primary",
+                                                  className="mt-3 btn-primary text-center"),className="d-flex justify-content-center")
                                       
                                        ],
                              body=True, color="dark", outline=True)
-                    , width=6, className="mb-4")
+                    , width=6, className="mb-4 rounded-corner")
 
         ], className="mb-5"),
          dbc.Row([

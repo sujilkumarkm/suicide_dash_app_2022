@@ -676,10 +676,10 @@ input.inputError:focus {
   right: 0;
   width: auto;
   left: auto;
+  text-align: start;
   border-radius: 0;
   margin: 5px 0 0 0;
-  text-align: center;
-  background-color: #a7a402;
+  background-color: #9F8200;
 }
 .navbar .dropdown-menu .submenu.dropdown-menu {
   right: 100%;
@@ -6744,7 +6744,7 @@ h3.common-head {
 {
   /* justify-self: center; */
   color: #fff;
-  background-color: #a7a402 !important;
+  background-color: #9F8200 !important;
 }
 
 .dropdown-toggle::after 
@@ -6757,5 +6757,14 @@ h3.common-head {
     border-right: unset !important;
     border-bottom: unset !important;
     border-left: unset !important;
+}
+
+.card-body{
+  background-color: #9F8200 !important;
+  border-radius:2em !important;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+  background-color: #00015D !important;
 }
 /*# sourceMappingURL=style.css.map */
