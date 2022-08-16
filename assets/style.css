@@ -679,7 +679,7 @@ input.inputError:focus {
   border-radius: 0;
   margin: 5px 0 0 0;
   text-align: center;
-  background-color: #a7a402c2;
+  background-color: #a7a402;
 }
 .navbar .dropdown-menu .submenu.dropdown-menu {
   right: 100%;
@@ -6740,4 +6740,22 @@ h3.common-head {
   }
 }
 
+.dropdown-item:focus, .dropdown-item:hover
+{
+  /* justify-self: center; */
+  color: #fff;
+  background-color: #a7a402 !important;
+}
+
+.dropdown-toggle::after 
+{
+    display: unset !important;
+    margin-left: unset !important;
+    vertical-align: unset !important;
+    content: unset !important;
+    border-top: unset !important;
+    border-right: unset !important;
+    border-bottom: unset !important;
+    border-left: unset !important;
+}
 /*# sourceMappingURL=style.css.map */

@@ -39,13 +39,11 @@ navbar = dbc.Navbar(
                 ),
                 href="/home",
             ),
-            dbc.NavbarToggler(id="navbar-toggler2"),
             dbc.Collapse(
                 dbc.Nav(
                     # right align dropdown menu with ml-auto className
-                    [dropdown], className="ml-auto", navbar=True
+                    [dropdown], className="nav-link dropdown-toggle"
                 ),
-                id="navbar-collapse2",
                 navbar=True,
             ),
             html.A(dbc.Row(
