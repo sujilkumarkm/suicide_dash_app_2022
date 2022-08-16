@@ -7,7 +7,7 @@ from app import app
 layout = html.Div([
     dbc.Container([
                 dbc.Row([
-           dbc.Col(dbc.CardImg(src=app.get_asset_url('/wall_paper.jpg'), className = 'text-center'),
+           dbc.Col(dbc.CardImg(src=app.get_asset_url('wall_paper.jpg'), className = 'text-center'),
             style={"maxWidth": "100%"})
         ]),
         dbc.Row([
