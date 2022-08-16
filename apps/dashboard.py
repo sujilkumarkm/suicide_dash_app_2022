@@ -164,10 +164,12 @@ def update_line_chart(country_names, range_chosen):
     fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
 
     mask1 = dff.country.isin(country_names)
+    agedistf = pd.DataFrame(df.groupby('sex').get_group('female').groupby('age').suicides.sum())
+    agedistm = pd.DataFrame(df.groupby('sex').get_group('male').groupby('age').suicides.sum())
     # fig1 = px.bar(dff[mask1],x="country", y="population", color='population')
-    fig1 = px.sunburst(dff[mask1], path=['sex', 'country', 'country_code'], values='suicides')
+    # fig1 = px.sunburst(dff[mask1], path=['sex', 'country', 'country_code'], values='suicides')
+    fig1 = px.bar(dff[mask1], x="age",color="sex", title="Gender count with age")
 
-    # fig3 = px.scatter(dff[mask3],x="sucid_in_hundredk", y="population", color='sex')
     dfff=dff.groupby(["country"], as_index=False)[["sucid_in_hundredk","gdp_per_capita"]].mean()
     mask3 = dfff.country.isin(country_names)
 
