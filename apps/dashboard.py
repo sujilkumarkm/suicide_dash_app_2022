@@ -42,8 +42,17 @@ layout = html.Div([
                     }
                     ),
                 dbc.Row(children=[
+                        dbc.Col(
+                            html.Div(["Select Continent"]),
+                            width={"size": 4, "offset": 2},
+                        ),
+                        dbc.Col(
+                            html.Div("Select Suicide Range"),
+                            width={"size": 4, "offset": 2},
+                        )
+                ], className='ml-2 mb-2',justify="center",),
+                dbc.Row(children=[
                     dbc.Col(children=[
-                    html.Label('Select Countries'),
                     dcc.Dropdown(id='country_drop',
                                 options=[{'label': i, 'value': i}
                                         for i in country_names],
@@ -57,7 +66,6 @@ layout = html.Div([
                     ], className='ml-2 mb-2'),  
                         dbc.Col(html.Div([
                                 dbc.Col(children=[
-                                html.Label('Select Suicide Range'),
                                 dcc.RangeSlider(id='suicides_slider',
                                     min=0,
                                     max=180,
@@ -70,10 +78,13 @@ layout = html.Div([
                                         178: '178',
                                     },
                                 )
-                                ]),
+                                ],
+                                ),
                                 ],className='pb-2')
                         ),
-                    ]),
+                    ],style={
+                        'marginLeft' : '10px',
+                    }),
 
 ################### End of first row #######################   
             dbc.Row([
@@ -87,7 +98,10 @@ layout = html.Div([
 
             ], 
             className='text-center pt-2 pb-2',
-            style={}),
+            style={
+                'marginLeft' : '10px',
+                'marginRight': '10px',
+            }),
 
 ################### End of second row #######################    
             dbc.Row([
@@ -99,7 +113,10 @@ layout = html.Div([
                     ,className='col-6 col-sm-6 col-md-6'),
             ], 
             className='text-center pt-2 pb-2',
-            style={}),
+            style={
+                'marginLeft' : '10px',
+                'marginRight': '10px',
+            }),
 
 ################### start of footer row #######################   
         
@@ -127,7 +144,12 @@ layout = html.Div([
             ])
 
     ]),
-    ],className="pt-2")
+    ],className="pt-2"
+    ,style={
+        'marginLeft' : '10px',
+        'marginRight': '10px',
+    }
+    )
 
 ])
 

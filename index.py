@@ -33,7 +33,7 @@ navbar = dbc.Navbar(
                 dbc.Row(
                     [
                         dbc.Col(html.Img(src="/assets/dkit_logo.png", height="60px")),
-                        dbc.Col(dbc.NavbarBrand("Suicide Analysis Dashboard", className="ml-2")),
+                        dbc.Col(dbc.NavbarBrand("Suicide Analysis Dashboard", className="")),
                     ],
                     align="center",
                 ),

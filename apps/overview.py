@@ -81,9 +81,6 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                                 value=cont_names,
                                 multi=True,
                                 style={
-                                    #   'marginTop' : '10px',
-                                    # 'marginRight' : '10px',
-                                    # 'marginBottom' : '50px',
                                     'marginLeft' : '10px',
                                     'color': '#1c1818',
                                 }
