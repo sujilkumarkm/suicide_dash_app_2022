@@ -55,31 +55,41 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
         'color': colors['text']}
     ),
     html.Div([
-        html.Div([
-
             ################### start of first row #######################   
                 html.H1('Suicide Statistics Countrywise',
                 style={
+                    'marginLeft' : '10px',
                     'textAlign': 'center',
                     'color': '#00000',
-                    }
+                    },
                     ),
+                    dbc.Row(children=[
+                        dbc.Col(
+                            html.Div(["Select Continent"]),
+                            width={"size": 4, "offset": 2},
+                        ),
+                        dbc.Col(
+                            html.Div("Select Suicide Range"),
+                            width={"size": 4, "offset": 2},
+                        )
+                 ], className='ml-2 mb-2',justify="center",),
                 dbc.Row(children=[
                     dbc.Col(children=[
-                    html.Label('Select Continent'),
                     dcc.Dropdown(id='cont_dropdown',
                                 options=[{'label': i, 'value': i}
                                         for i in cont_names],
                                 value=cont_names,
                                 multi=True,
                                 style={
-                                    # 'textAlign': 'center',
+                                    #   'marginTop' : '10px',
+                                    # 'marginRight' : '10px',
+                                    # 'marginBottom' : '50px',
+                                    'marginLeft' : '10px',
                                     'color': '#1c1818',
                                 }
                     )
-                    ], className='ml-2 mb-2'),  
-                        dbc.Col(dbc.Col(children=[
-                                html.Label('Select Suicide Range'),
+                    ], className='ml-5 mb-2'),  
+                    dbc.Col(dbc.Col(children=[
                              dcc.RangeSlider(id='pop_range',
                                 min=0,
                                 max=180,
@@ -91,13 +101,14 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                                     100: '100',
                                     178: '178',
                                 },
+
                                 )
                                 ], className='ml-2 mb-2'),
                         ),
                     ]),
 
-        
-        ]),
+
+
             ################### End of first row #######################  
                 dbc.Row([
                 dbc.Col(html.Div(children=
@@ -107,8 +118,9 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                         style={
                             "width": "100%",
                             "height": "100%",
+                            'marginLeft' : '10px',
                         },),               
-                    ],className=''),className='col-11 col-sm-11 col-md-11 mr-3 mt-3'),
+                    ],className=''),className='col-12 col-sm-12 col-md-12 ml-5 mt-3'),
 
                 ],className='pt-2 pb-2',
                     style={"width": "100%",
@@ -135,29 +147,34 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     ],className='ml-3 mr-3 mt-3'),className='col-11 col-sm-12 col-md-12'),
 
             ], 
-            className='text-center pb-3',
-            style={}),
+            className='text-center pb-3 ml-3',
+            style={
+                'marginLeft' : '10px',
+                'textAlign': 'center',
+                'color': '#00000',
+            },),
 
             ################### End of third row #######################   
                     dbc.Row([
-                        dbc.Col(html.Div(children=
+                        dbc.Col(
+                            html.Div(children=
                             [
                                 html.Div([
                                     dcc.Graph(id='LifeExp')
-                                    ],className=' mr-3 ml-3',
-                                    style={}),    
+                                ],className=' mr-3 ml-3',),    
                             ]),className='col-6 col-sm-6 col-md-6'),
-
-                       
-                        dbc.Col(html.Div(children=
+                            dbc.Col(html.Div(children=
                             [
                                 html.Div([
                                     dcc.Graph(id='LifeExpOverTime',)
-                                    ],className=' mr-3 ml-3',
-                                    style={}),    
+                                ],className=' mr-3 ml-3',
+                                style={}),    
                             ]),className='col-6 col-sm-6 col-md-6'),
-
-                         ],className='text-center pb-3',style={}),
+                    ],className='text-center pb-3',align="center",
+                    style={
+                        'marginLeft' : '10px',
+                        'marginRight' : '10px',
+                    }),
 
             ################### End of fourth row #######################         
 
