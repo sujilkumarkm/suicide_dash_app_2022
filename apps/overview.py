@@ -49,20 +49,13 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
     ),
     #Add multiple line text 
     html.Div('''
-        Suicide Rate vs GDP per Capita for different Countries from 1985 to 2005
+        Suicide Rate vs GDP per Capita for different Continents from 1985 to 2005
     ''', style={
         'textAlign': 'center',
         'color': colors['text']}
     ),
     html.Div([
             ################### start of first row #######################   
-                html.H1('Suicide Statistics Countrywise',
-                style={
-                    'marginLeft' : '10px',
-                    'textAlign': 'center',
-                    'color': '#00000',
-                    },
-                    ),
                     dbc.Row(children=[
                         dbc.Col(
                             html.Div(["Select Continent"]),
