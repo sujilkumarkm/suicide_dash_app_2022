@@ -172,13 +172,28 @@ def update_line_chart(country_names, range_chosen):
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
-    # fig = px.scatter(dff[mask], 
-    # x="population", y="sucid_in_hundredk", color="country", size='population',
-    #              hover_name="sex", size_max=60)
-    fig= px.choropleth(dff[mask],               
+    tempdf = dff[mask]
+    for_plot = tempdf.groupby(["year", "country_code", "country"])["sucid_in_hundredk"].sum()
+    ndf = pd.DataFrame()
+    yrs = []
+    cc = []
+    c =[]
+    sd = []
+    for key, values in for_plot.items():
+        yrs.append(key[0])
+        cc.append(key[1])
+        c.append(key[2])
+        sd.append(values)
+
+    ndf["year"] = yrs
+    ndf["country_code"] = cc
+    ndf["country"] = c
+    ndf["sucid_in_hundredk"] = sd
+
+    fig= px.choropleth(ndf,               
               locations="country_code", color="sucid_in_hundredk",
               hover_name="country",  
-              animation_frame="year")
+              animation_frame="year")            
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
