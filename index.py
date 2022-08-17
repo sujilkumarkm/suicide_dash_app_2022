@@ -19,7 +19,7 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("Forecast Models", href="/forecast1"),
         dbc.DropdownMenuItem("Data Integrity", href="/outliers"),
         dbc.DropdownMenuItem("Data View", href="/data"),
-        # dbc.DropdownMenuItem("Feedback", href="/feedback"),
+        dbc.DropdownMenuItem("Feedback", href="https://www.dkit.ie.narayam.net/contact",target="_blank",),
     ],
     nav = True,
     in_navbar = True,
@@ -58,13 +58,7 @@ navbar = dbc.Navbar(
                         dbc.DropdownMenuItem("Privacy Policy", className="ml-2"),
                     ],
                     align="center",
-                ),href="/https://dkit.ie.narayam.net/contact",),
-                 html.A(dbc.Row(
-                    [                        
-                        dbc.DropdownMenuItem("Feedback", className="ml-2"),
-                    ],
-                    align="center",
-                ),href="/https://dkit.ie.narayam.net/contact",),
+                ),href="/policy"),
         ]
     ),sticky="top",
     color="dark",

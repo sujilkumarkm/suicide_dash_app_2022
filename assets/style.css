@@ -691,7 +691,7 @@ input.inputError:focus {
   color: #FFFFFF;
   text-decoration: none;
   position: relative;
-  padding: 3px;
+  padding: 2px;
   background-color: transparent;
 }
 
@@ -6767,4 +6767,10 @@ h3.common-head {
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
   background-color: #00015D !important;
 }
+
+.dropdown-item {
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
 /*# sourceMappingURL=style.css.map */
