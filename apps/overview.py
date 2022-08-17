@@ -9,6 +9,7 @@ import mysql.connector as connection
 import plotly.express as px
 import pandas as pd
 import numpy as np
+from dash.dash_table import DataTable, FormatTemplate
 
 
 #data for the Suicide plots
@@ -223,21 +224,31 @@ def update_map(selected_cont,rangevalue,yvar):
             data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
-    map_fig= px.choropleth(df,locations="country_code", color=df[yvar],
-            hover_name="country",hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
-            color_continuous_scale='Turbo',range_color=[df[yvar].min(), df[yvar].max()],
-            labels={'sucid_in_hundredk':'Suicide in hundredk','year':'Year','continent':'Continent',
-                'country':'Country','suicides':'Suicide'})
+    # print(df.columns)
+    mask = df.country.isin(country_names)
+    tempdf = df[mask]
+    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(
+     sucid_in_hundredk = ('sucid_in_hundredk','sum'),
+     suicides = ('suicides','sum'),
+     population = ('population','sum'),
+     gdp_per_capita = ('gdp_per_capita','sum'),
+     ).reset_index()
+    print(ndf)
+    map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
+        hover_name="country",hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
+        color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
+        labels={'sucid_in_hundredk':'Suicide in hundredk','year':'Year','continent':'Continent',
+            'country':'Country','suicides':'Suicide'})
     map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
 
-    line_fig = px.line(data_frame=df, 
-                x="year",  y = df[yvar] , color='continent',line_group="country", 
-                hover_data=['sucid_in_hundredk','year'],
-                 # Add bold variable in hover information
-                  hover_name='country',color_discrete_map=color_discrete_map,
-                 # change labels
-                 labels={'sucid_in_hundredk':'Population','year':'Year','continent':'Continent',
-                     'country':'Country','suicides':'Suicide'})
+    line_fig = px.line(data_frame=ndf, 
+        x="year",  y = ndf[yvar] , color='country',line_group="country", 
+        hover_data=['sucid_in_hundredk','year'],
+        # Add bold variable in hover information
+        hover_name='country',color_discrete_map=color_discrete_map,
+        # change labels
+        labels={'sucid_in_hundredk':'Population','year':'Year','continent':'Continent',
+                'country':'Country','suicides':'Suicide'})
     line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
         paper_bgcolor='rgb(233, 238, 245)')
         
