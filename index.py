@@ -19,6 +19,7 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("Forecast Models", href="/forecast1"),
         dbc.DropdownMenuItem("Data Integrity", href="/outliers"),
         dbc.DropdownMenuItem("Data View", href="/data"),
+        # dbc.DropdownMenuItem("Feedback", href="/feedback"),
     ],
     nav = True,
     in_navbar = True,
@@ -57,11 +58,17 @@ navbar = dbc.Navbar(
                         dbc.DropdownMenuItem("Privacy Policy", className="ml-2"),
                     ],
                     align="center",
-                ),href="/policy",),
+                ),href="/https://dkit.ie.narayam.net/contact",),
+                 html.A(dbc.Row(
+                    [                        
+                        dbc.DropdownMenuItem("Feedback", className="ml-2"),
+                    ],
+                    align="center",
+                ),href="/https://dkit.ie.narayam.net/contact",),
         ]
     ),sticky="top",
     color="dark",
-    dark=True,
+    dark=True,  
     className="mb-4",
 )
 row = html.Div(
@@ -110,6 +117,8 @@ def display_page(pathname):
         return outliers.layout
     elif pathname == '/data':
         return data.layout
+    # elif pathname == '/feedback':
+    #     return 'https://dkit.ie.narayam.net/contact'
     
     else:
         return home.layout
@@ -118,4 +127,4 @@ def display_page(pathname):
 if __name__ != '__main__':
     pass
 else:
-    app.run_server(port=8000, debug=True)
+    app.run_server(port=8000, debug=False, host='0.0.0.0')
