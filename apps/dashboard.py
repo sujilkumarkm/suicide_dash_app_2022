@@ -199,14 +199,33 @@ def update_line_chart(country_names, range_chosen):
         showlegend=False)
     mask2 = dff.country.isin(country_names)
     fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
-
-    mask1 = dff.country.isin(country_names)
-    agedistf = pd.DataFrame(df.groupby('sex').get_group('female').groupby('age').suicides.sum())
-    agedistm = pd.DataFrame(df.groupby('sex').get_group('male').groupby('age').suicides.sum())
-    # fig1 = px.bar(dff[mask1],x="country", y="population", color='population')
-    # fig1 = px.sunburst(dff[mask1], path=['sex', 'country', 'country_code'], values='suicides')
-    fig1 = px.bar(dff[mask1], x="age",color="sex", title="Gender count with age")
-
+    # print(dff.columns)
+    
+    # start of barchart code
+    female_data = pd.DataFrame(tempdf.groupby('sex').get_group('female').groupby('age').suicides.sum())
+    sex_female = 'female'
+    female_data['sex'] = sex_female
+    # print('\n\n ################## female data : ##################\t \n\n', female_data)
+    
+    male_data = pd.DataFrame(tempdf.groupby('sex').get_group('male').groupby('age').suicides.sum())
+    sex_male = 'male'
+    male_data['sex'] = sex_male
+    # print('\n\n ################## male data : ################## \t \n\n', male_data)
+    total_sex = female_data.append(male_data)
+    # print('\n\n ################## total data : ################## \t \n\n', total_sex)
+    
+    ndf = total_sex.groupby(['sex','age']).agg(
+    suicides = ('suicides','sum'),
+    # age = ('age','sum'),
+    ).reset_index()
+    print('\n\n ################## final data : ################## \t \n\n', ndf)
+    fig1 = px.bar(ndf, x="age", color="sex",
+             y='suicides',
+             barmode='relative',
+            )
+    fig1.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
+    # end of barchart code
+    
     dfff=dff.groupby(["country"], as_index=False)[["sucid_in_hundredk","gdp_per_capita"]].mean()
     mask3 = dfff.country.isin(country_names)
 

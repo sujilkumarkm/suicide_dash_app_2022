@@ -227,13 +227,12 @@ def update_map(selected_cont,rangevalue,yvar):
     # print(df.columns)
     mask = df.country.isin(country_names)
     tempdf = df[mask]
-    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(
-     sucid_in_hundredk = ('sucid_in_hundredk','sum'),
+    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
      suicides = ('suicides','sum'),
      population = ('population','sum'),
      gdp_per_capita = ('gdp_per_capita','sum'),
      ).reset_index()
-    print(ndf)
+    # print(ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
         hover_name="country",hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
