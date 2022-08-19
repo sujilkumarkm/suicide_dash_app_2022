@@ -9,7 +9,12 @@ import plotly.express as px
 
 df_cont = pd.read_csv("assets/data/countryContinent.csv", encoding="ISO-8859-1")
 url = 'assets/data/suicide_moredata.csv'
+url2 = 'assets/data/suicide_master.csv'
+first_data = pd.read_csv(url2)
 second_data = pd.read_csv(url)
+
+first_data.columns = ['country', 'year', 'sex', 'age', 'suicides_no', 'population','suicidesper100k', 'country-year', 'yearlyHDI',
+    'GDPpyear', 'GDPpcapita', 'generation']
 second_data.columns = ['country', 'year', 'sex', 'age', 'suicides_no', 'population','suicidesper100k', 'country-year', 'yearlyHDI',
     'GDPpyear', 'GDPpcapita', 'generation', 'suicide%', 'Internetusers', 'Expenses', 'employeecompensation','Unemployment', 'Physiciansp1000', 'Legalrights', 'Laborforcetotal','Lifeexpectancy', 'Mobilesubscriptionsp100','Refugees', 'Selfemployed', 'electricityacess', 'secondarycompletion']
 
@@ -22,6 +27,22 @@ second_data.rename( {'suicides_no':'suicides' } , axis=1 , inplace = True)
 second_data.columns = map(str.lower, second_data.columns)
 # remove special character
 second_data.columns = second_data.columns.str.replace(' ', '')
+
+first_data.rename( {'GDPpyear':'yearly_gdp' } , axis=1 , inplace = True)
+first_data.rename( {'GDPpcapita':'gdp_per_capita' } , axis=1 , inplace = True)
+first_data.rename( {'yearlyHDI':'yearly_hdi' } , axis=1 , inplace = True)
+first_data.rename( {'suicidesper100k':'sucid_in_hundredk' } , axis=1 , inplace = True)
+first_data.rename( {'suicides_no':'suicides' } , axis=1 , inplace = True)
+
+first_data.columns = map(str.lower, first_data.columns)
+# remove special character
+first_data.columns = first_data.columns.str.replace(' ', '')
+
+
+second_data = pd.merge(second_data, first_data, on =['country', 'year', 'sex', 'age', 'suicides', 'population',
+       'sucid_in_hundredk', 'country-year', 'yearly_hdi', 'yearly_gdp',
+      'gdp_per_capita', 'generation'] , how = 'left')
+
 second_data = second_data.merge(df_cont[['country', 'continent', 'code_3']])
 
 second_data.rename( {'code_3':'country_code' } , axis=1 , inplace = True)
