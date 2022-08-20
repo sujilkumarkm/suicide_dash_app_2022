@@ -165,7 +165,7 @@ layout = html.Div([
 def update_line_chart(country_names, range_chosen):
     if not (country_names or range_chosen):
         return dash.no_update
-    d = df[(df['sucid_in_hundredk'] >= range_chosen[0]) & (df['sucid_in_hundredk'] <= range_chosen[1])]
+    d = df[(df['suicides'] >= range_chosen[0]) & (df['suicides'] <= range_chosen[1])]
     data =[]
     for j in country_names:
             data.append(d[d['country'] == j])
@@ -173,7 +173,7 @@ def update_line_chart(country_names, range_chosen):
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
     tempdf = dff[mask]
-    for_plot = tempdf.groupby(["year", "country_code", "country"])["sucid_in_hundredk"].sum()
+    for_plot = tempdf.groupby(["year", "country_code", "country"])["suicides"].sum()
     ndf = pd.DataFrame()
     yrs = []
     cc = []
@@ -188,12 +188,14 @@ def update_line_chart(country_names, range_chosen):
     ndf["year"] = yrs
     ndf["country_code"] = cc
     ndf["country"] = c
-    ndf["sucid_in_hundredk"] = sd
+    ndf["suicides"] = sd
 
     fig= px.choropleth(ndf,               
-              locations="country_code", color="sucid_in_hundredk",
-              hover_name="country",  
-              animation_frame="year")            
+            locations="country_code", color="suicides",
+            hover_name="country",  
+            animation_frame="year",
+            labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})     
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
@@ -222,6 +224,7 @@ def update_line_chart(country_names, range_chosen):
     fig1 = px.bar(ndf, x="age", color="sex",
              y='suicides',
              barmode='relative',
+             text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita",}
             )
     fig1.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
     # end of barchart code
