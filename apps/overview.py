@@ -71,8 +71,8 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     dbc.Col(children=[
                     dcc.Dropdown(id='cont_dropdown',
                                 options=[{'label': i, 'value': i}
-                                        for i in cont_names],
-                                value=cont_names,
+                                        for i in country_names],
+                                value=country_names,
                                 multi=True,
                                 style={
                                     'marginLeft' : '10px',
@@ -184,7 +184,7 @@ def update_graph(selected_cont,rangevalue):
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     # d = gapminder[(gapminder['population'] >= rangevalue[0]) & (gapminder['population'] <= rangevalue[1])]
     for j in selected_cont:
-            data.append(d[d['continent'] == j])
+            data.append(d[d['country'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=cols)
     df=df.infer_objects()
     # print(df.columns)
@@ -196,10 +196,10 @@ def update_graph(selected_cont,rangevalue):
      gdp_per_capita = ('gdp_per_capita','sum'),
      ).reset_index()
     scat_fig = px.scatter(data_frame=ndf, x="gdp_per_capita", y="sucid_in_hundredk",
-                size="sucid_in_hundredk", color="continent",hover_name="country",
+                size="sucid_in_hundredk", color="country",hover_name="country",
                 color_discrete_map=color_discrete_map, 
                 animation_frame="year",animation_group="country",
-                size_max=80, range_x=[100,1200000], range_y=[0,850],
+                size_max=80, range_x=[100,1100000], range_y=[0,600],
                 labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
@@ -221,7 +221,7 @@ def update_map(selected_cont,rangevalue,yvar):
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     data =[]
     for j in selected_cont:
-            data.append(d[d['continent'] == j])
+            data.append(d[d['country'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
     # print(df.columns)
