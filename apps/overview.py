@@ -81,7 +81,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     )
                     ], className='ml-5 mb-2'),  
                     dbc.Col(dbc.Col(children=[
-                             dcc.RangeSlider(id='pop_range',
+                             dcc.RangeSlider(id='suicide_range_slider',
                                 min=0,
                                 max=180,
                                 value=[0,180],
@@ -104,7 +104,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                 dbc.Row([
                 dbc.Col(html.Div(children=
                     [
-                        dcc.Graph(id='LifeExpVsGDP',
+                        dcc.Graph(id='bubble_graph',
                         responsive=True,
                         style={
                             "width": "100%",
@@ -128,10 +128,10 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     [
                         dcc.Dropdown(id='y_dropdown',
                         options=[                    
-                            {'label': 'Suicide', 'value': 'sucid_in_hundredk'},
+                            {'label': 'Suicide', 'value': 'suicides'},
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
-                        value='sucid_in_hundredk',
+                        value='suicides',
                         style={'width':'50%',
                                'color': '#1c1818',},
                         ),               
@@ -173,9 +173,9 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
 ])
 ])
 @app.callback(
-    Output(component_id='LifeExpVsGDP', component_property='figure'),
+    Output(component_id='bubble_graph', component_property='figure'),
     [Input(component_id='cont_dropdown', component_property='value'),
-    Input(component_id='pop_range', component_property='value')]
+    Input(component_id='suicide_range_slider', component_property='value')]
 )
 def update_graph(selected_cont,rangevalue):
     if not selected_cont:
@@ -187,22 +187,22 @@ def update_graph(selected_cont,rangevalue):
             data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=cols)
     df=df.infer_objects()
-    scat_fig = px.scatter(data_frame=df, x="gdp_per_capita", y="sucid_in_hundredk",
+    # print(df.columns)
+    mask = df.country.isin(country_names)
+    tempdf = df[mask]
+    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
+     suicides = ('suicides','sum'),
+     population = ('population','sum'),
+     gdp_per_capita = ('gdp_per_capita','sum'),
+     ).reset_index()
+    scat_fig = px.scatter(data_frame=ndf, x="gdp_per_capita", y="sucid_in_hundredk",
                 size="sucid_in_hundredk", color="continent",hover_name="country",
-                # different colour for each country
                 color_discrete_map=color_discrete_map, 
-                #add frame by year to create animation grouped by country
                 animation_frame="year",animation_group="country",
-                #specify formating of markers and axes
-                # log_x = True, size_max=60, range_x=[100,100000], range_y=[28,92],
-                log_x = True, size_max=60, range_x=[100,100000], range_y=[28,92],
-                # change labels
-                labels={'population':'Population','year':'Year','continent':'Continent',
-                        'country':'Country','suicides':'Suicide','gdp_per_capita':"GDP/Capita"})
-    # Change the axis titles and add background colour using rgb syntax
-    scat_fig.update_layout({'xaxis': {'title': {'text': 'log(GDP Per Capita)'}},
-                  'yaxis': {'title': {'text': 'Suicide'}}}, 
-                  plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
+                size_max=80, range_x=[100,1500000], range_y=[0,850],
+                labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
+    scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
 
     return scat_fig
 
@@ -212,7 +212,7 @@ def update_graph(selected_cont,rangevalue):
     [Output(component_id='LifeExp', component_property='figure'),
     Output(component_id='LifeExpOverTime', component_property='figure')],
     [Input(component_id='cont_dropdown', component_property='value'),
-    Input(component_id='pop_range', component_property='value'),
+    Input(component_id='suicide_range_slider', component_property='value'),
     Input(component_id='y_dropdown', component_property='value')]
 )
 def update_map(selected_cont,rangevalue,yvar):
@@ -232,7 +232,7 @@ def update_map(selected_cont,rangevalue,yvar):
      population = ('population','sum'),
      gdp_per_capita = ('gdp_per_capita','sum'),
      ).reset_index()
-    # print(ndf)
+    print('\n\n ################## final data : ################## \t \n\n', ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
         hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],

@@ -199,8 +199,8 @@ def update_line_chart(country_names, range_chosen):
     fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
-    mask2 = dff.country.isin(country_names)
-    fig2 = px.histogram(dff[mask2],x="sex", y="population", color='country')
+
+    fig2 = px.histogram(dff[mask],x="sex", y="population", color='country')
     # print(dff.columns)
     
     # start of barchart code
@@ -220,7 +220,7 @@ def update_line_chart(country_names, range_chosen):
     suicides = ('suicides','sum'),
     # age = ('age','sum'),
     ).reset_index()
-    print('\n\n ################## final data : ################## \t \n\n', ndf)
+    # print('\n\n ################## final data : ################## \t \n\n', ndf)
     fig1 = px.bar(ndf, x="age", color="sex",
              y='suicides',
              barmode='relative',
