@@ -172,26 +172,14 @@ def update_line_chart(country_names, range_chosen):
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
-    tempdf = dff[mask]
-    for_plot = tempdf.groupby(["year", "country_code", "country"])["sucid_in_hundredk"].sum()
-    ndf = pd.DataFrame()
-    yrs = []
-    cc = []
-    c =[]
-    sd = []
-    for key, values in for_plot.items():
-        yrs.append(key[0])
-        cc.append(key[1])
-        c.append(key[2])
-        sd.append(values)
-
-    ndf["year"] = yrs
-    ndf["country_code"] = cc
-    ndf["country"] = c
-    ndf["sucid_in_hundredk"] = sd
-
+    tempdf = df[mask]
+    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
+     suicides = ('suicides','sum'),
+     population = ('population','sum'),
+     gdp_per_capita = ('gdp_per_capita','sum'),
+     ).reset_index()
     fig= px.choropleth(ndf,               
-            locations="country_code", color="sucid_in_hundredk",
+            locations="country_code", color="suicides",
             hover_name="country",  
             animation_frame="year",
             labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
@@ -225,7 +213,7 @@ def update_line_chart(country_names, range_chosen):
              y='suicides',
              barmode='relative',
              labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
-                    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',})
+                    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',},)
     fig1.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
     # end of barchart code
     

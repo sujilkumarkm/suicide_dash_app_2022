@@ -63,7 +63,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                             width={"size": 4, "offset": 2},
                         ),
                         dbc.Col(
-                            html.Div("Select Suicide Range"),
+                            html.Div("Select Suicide in Hundredk Range"),
                             width={"size": 4, "offset": 2},
                         )
                  ], className='ml-2 mb-2',justify="center",),
@@ -128,10 +128,10 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     [
                         dcc.Dropdown(id='y_dropdown',
                         options=[                    
-                            {'label': 'Suicide', 'value': 'suicides'},
+                            {'label': 'Suicide in Hundredk', 'value': 'sucid_in_hundredk'},
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
-                        value='suicides',
+                        value='sucid_in_hundredk',
                         style={'width':'50%',
                                'color': '#1c1818',},
                         ),               
@@ -199,7 +199,7 @@ def update_graph(selected_cont,rangevalue):
                 size="sucid_in_hundredk", color="continent",hover_name="country",
                 color_discrete_map=color_discrete_map, 
                 animation_frame="year",animation_group="country",
-                size_max=80, range_x=[100,1500000], range_y=[0,850],
+                size_max=80, range_x=[100,1200000], range_y=[0,850],
                 labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
