@@ -234,25 +234,21 @@ def update_map(selected_cont,rangevalue,yvar):
      ).reset_index()
     # print(ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
-        hover_name="country",hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
+        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
-        labels={'sucid_in_hundredk':'Suicide in hundredk','year':'Year','continent':'Continent',
-            'country':'Country','suicides':'Suicide'})
+        labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
 
     line_fig = px.line(data_frame=ndf, 
         x="year",  y = ndf[yvar] , color='country',line_group="country", 
         hover_data=['sucid_in_hundredk','year'],
         # Add bold variable in hover information
-        hover_name='country',color_discrete_map=color_discrete_map,
+        hover_name=ndf[yvar],color_discrete_map=color_discrete_map,
         # change labels
-        labels={'sucid_in_hundredk':'Population','year':'Year','continent':'Continent',
-                'country':'Country','suicides':'Suicide'})
+        labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
         paper_bgcolor='rgb(233, 238, 245)')
         
     return [map_fig, line_fig]
-
-# needed only if running this as a single page app
-#if __name__ == '__main__':
-#    app.run_server(port=8097,debug=True)
