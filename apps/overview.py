@@ -151,13 +151,13 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                             html.Div(children=
                             [
                                 html.Div([
-                                    dcc.Graph(id='LifeExp')
+                                    dcc.Graph(id='map_chart')
                                 ],className=' mr-3 ml-3',),    
                             ]),className='col-6 col-sm-6 col-md-6'),
                             dbc.Col(html.Div(children=
                             [
                                 html.Div([
-                                    dcc.Graph(id='LifeExpOverTime',)
+                                    dcc.Graph(id='line_chart',)
                                 ],className=' mr-3 ml-3',
                                 style={}),    
                             ]),className='col-6 col-sm-6 col-md-6'),
@@ -209,8 +209,8 @@ def update_graph(selected_cont,rangevalue):
 
 
 @app.callback(
-    [Output(component_id='LifeExp', component_property='figure'),
-    Output(component_id='LifeExpOverTime', component_property='figure')],
+    [Output(component_id='map_chart', component_property='figure'),
+    Output(component_id='line_chart', component_property='figure')],
     [Input(component_id='cont_dropdown', component_property='value'),
     Input(component_id='suicide_range_slider', component_property='value'),
     Input(component_id='y_dropdown', component_property='value')]
