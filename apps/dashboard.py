@@ -165,7 +165,7 @@ layout = html.Div([
 def update_line_chart(country_names, range_chosen):
     if not (country_names or range_chosen):
         return dash.no_update
-    d = df[(df['suicides'] >= range_chosen[0]) & (df['suicides'] <= range_chosen[1])]
+    d = df[(df['sucid_in_hundredk'] >= range_chosen[0]) & (df['sucid_in_hundredk'] <= range_chosen[1])]
     data =[]
     for j in country_names:
             data.append(d[d['country'] == j])
@@ -173,7 +173,7 @@ def update_line_chart(country_names, range_chosen):
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
     tempdf = dff[mask]
-    for_plot = tempdf.groupby(["year", "country_code", "country"])["suicides"].sum()
+    for_plot = tempdf.groupby(["year", "country_code", "country"])["sucid_in_hundredk"].sum()
     ndf = pd.DataFrame()
     yrs = []
     cc = []
@@ -188,10 +188,10 @@ def update_line_chart(country_names, range_chosen):
     ndf["year"] = yrs
     ndf["country_code"] = cc
     ndf["country"] = c
-    ndf["suicides"] = sd
+    ndf["sucid_in_hundredk"] = sd
 
     fig= px.choropleth(ndf,               
-            locations="country_code", color="suicides",
+            locations="country_code", color="sucid_in_hundredk",
             hover_name="country",  
             animation_frame="year",
             labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
@@ -224,8 +224,8 @@ def update_line_chart(country_names, range_chosen):
     fig1 = px.bar(ndf, x="age", color="sex",
              y='suicides',
              barmode='relative',
-             text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita",}
-            )
+             labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',})
     fig1.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
     # end of barchart code
     
@@ -237,7 +237,7 @@ def update_line_chart(country_names, range_chosen):
             x="sucid_in_hundredk",
             y="gdp_per_capita",
             hover_data=['country'],
-            text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita",})
+            text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita","country":"Country Name"})
     return [fig, fig1, fig3, fig2]
 
 
