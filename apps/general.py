@@ -16,9 +16,11 @@ import mysql.connector as connection
 # df = pd.read_sql(query,mydb)
 
 df = pd.read_csv("assets/processed_data/output.csv")
-# df = df.iloc[10:1000]
+# print(df)
+
 columnss=list(df.columns)
 country_names = df['country'].unique()
+cont_names = df['continent'].unique()
 
 
 from app import app
@@ -66,8 +68,8 @@ layout = html.Div([
                     dbc.Col(children=[
                     dcc.Dropdown(id='country_drop',
                                 options=[{'label': i, 'value': i}
-                                        for i in country_names],
-                                value=country_names,
+                                        for i in cont_names],
+                                value=cont_names,
                                 multi=True,
                                 style={
                                     # 'textAlign': 'center',
@@ -96,6 +98,7 @@ layout = html.Div([
                     ],style={
                         'marginLeft' : '10px',
                     }),
+
 
 ################### End of first row #######################   
             dbc.Row([
@@ -173,17 +176,18 @@ layout = html.Div([
      Input(component_id='suicides_slider', component_property='value'),
     ]
 )
-def update_line_chart(country_names, range_chosen):
-    if not (country_names or range_chosen):
+def update_line_chart(cont_names, range_chosen):
+    if not (cont_names or range_chosen):
         return dash.no_update
     d = df[(df['sucid_in_hundredk'] >= range_chosen[0]) & (df['sucid_in_hundredk'] <= range_chosen[1])]
     data =[]
-    for j in country_names:
-            data.append(d[d['country'] == j])
+    for j in cont_names:
+            data.append(d[d['continent'] == j])
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
-    mask = dff.country.isin(country_names)
+    mask = dff.continent.isin(cont_names)
     tempdf = dff[mask]
+    print(tempdf)
     ndf = tempdf.groupby(['year','country_code','continent','country','sex']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
      suicides = ('suicides','sum'),
      population = ('population','sum'),
@@ -192,20 +196,80 @@ def update_line_chart(country_names, range_chosen):
     totalpyear = pd.DataFrame(ndf.groupby('year').suicides.sum())
     totalpyear1 = pd.DataFrame({'year':totalpyear.index, 'suicides':totalpyear.suicides}).reset_index(drop=True)
     totalpyear1.head()
-    print(totalpyear1.head())
-    fig= px.line(data_frame=totalpyear1, 
+    # print(totalpyear1.head())
+    fig1= px.line(data_frame=totalpyear1, 
         x="year",  y = 'suicides',hover_data=['suicides','year'],
             labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})     
-    fig.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
+    fig1.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
 
-    ndf1 = ndf.groupby(['country']).sucid_in_hundredk.mean().nlargest(10)
-    ndf1 = pd.DataFrame({'country':ndf1.index, 'sucid_in_hundredk':ndf1.values})
-    fig2 = px.bar(ndf1, x="sucid_in_hundredk", y="country", orientation='h',color='country',color_continuous_scale='Bluered_r', hover_name="country",
-    labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
-    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
+    ndf1 = ndf 
+    ndf1.groupby(['continent'])
+    # print(ndf)
+    ndf1 = ndf1.groupby(['year','continent']).agg(sucid_in_hundredk = ('suicides','sum'),
+    suicides = ('suicides','sum'),
+    population = ('population','sum'),
+    gdp_per_capita = ('gdp_per_capita','sum'),
+    ).reset_index()
+    ndf1 = ndf1[ndf1['continent'] == 'Asia']
+    # print(ndf1)
+    # define colors as a list 
+    colors = px.colors.qualitative.Plotly
+
+    # convert plotly hex colors to rgba to enable transparency adjustments
+    def hex_rgba(hex, transparency):
+        col_hex = hex.lstrip('#')
+        col_rgb = list(int(col_hex[i:i+2], 16) for i in (0, 2, 4))
+        col_rgb.extend([transparency])
+        areacol = tuple(col_rgb)
+        return areacol
+
+    rgba = [hex_rgba(c, transparency=0.2) for c in colors]
+    colCycle = ['rgba'+str(elem) for elem in rgba]
+
+    # Make sure the colors run in cycles if there are more lines than colors
+    def next_col(cols):
+        while True:
+            for col in cols:
+                yield col
+    line_color=next_col(cols=colCycle)
+
+    # plotly  figure
+    fig = go.Figure()
+
+    # add line and shaded area for each series and standards deviation
+
+    new_col = next(line_color)
+    x = list(ndf1.year)
+    y1 = ndf1['suicides']
+    y1_upper = [(y + np.std(ndf1['suicides'])) for y in ndf1['suicides']]
+    y1_lower = [(y - np.std(ndf1['suicides'])) for y in ndf1['suicides']]
+    y1_lower = y1_lower[::-1]
+
+    # standard deviation area
+    fig.add_traces(go.Scatter(x=x+x[::-1],
+                                y=y1_upper+y1_lower,
+                                fill='tozerox',
+                                fillcolor=new_col,
+                                line=dict(color='rgba(255,255,255,0)'),
+                                showlegend=False,
+                                name='suicides'))
+
+    # line trace
+    fig.add_traces(go.Scatter(x=x,
+                            y=y1,
+                            line=dict(color=new_col, width=2.5),
+                            mode='lines',
+                            name='suicides')
+                                )
+    # set x-axis
+    fig.update_layout(xaxis=dict(range=[1985,max(x)]),title="Suicide changed in each Continent", title_x=0.5,uniformtext_minsize=8, uniformtext_mode='hide',
+        plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
+        showlegend=False)
+
+    # fig.show()
     
     # start of barchart code
     female_data = pd.DataFrame(tempdf.groupby('sex').get_group('female').groupby('age').suicides.sum())
@@ -225,12 +289,12 @@ def update_line_chart(country_names, range_chosen):
     # age = ('age','sum'),
     ).reset_index()
     # print('\n\n ################## final data : ################## \t \n\n', ndf)
-    fig1 = px.bar(ndf, x="age", color="sex",
+    fig2 = px.bar(ndf, x="age", color="sex",
              y='suicides',
              barmode='relative',
              labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',},)
-    fig1.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
+    fig2.update_layout(title="Gender and Total Suicide Age-wise", title_x=0.5)
     # end of barchart code
     
     dfff=dff.groupby(["country"], as_index=False)[["sucid_in_hundredk","gdp_per_capita"]].mean()
@@ -242,7 +306,7 @@ def update_line_chart(country_names, range_chosen):
             y="gdp_per_capita",
             hover_data=['country'],
             text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita","country":"Country Name"})
-    return [fig, fig1, fig3, fig2]
+    return [fig1, fig2, fig3, fig]
 
 
 
