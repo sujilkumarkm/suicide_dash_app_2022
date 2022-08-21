@@ -141,7 +141,9 @@ layout = html.Div([
     )
         ########################### End of Footer #########################
 
-])
+]
+,style={
+'marginLeft' : '15px',},)
 
 @app.callback(
     [

@@ -83,7 +83,9 @@ layout = html.Div([
                         ], className="pt-2 pb-2"
                         )), 
 
-                    ]),
+                    ]
+                    ,style={
+                    'marginLeft' : '15px',}),
                 ################### start of footer row #######################   
         
                 dbc.Row([
