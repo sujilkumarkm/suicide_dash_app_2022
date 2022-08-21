@@ -203,7 +203,7 @@ def update_line_chart(cont_names, range_chosen):
                     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})     
     fig1.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-        showlegend=False)
+        showlegend=False, title_x=0.5)
 
     ndf1 = ndf 
     ndf1.groupby(['continent'])
