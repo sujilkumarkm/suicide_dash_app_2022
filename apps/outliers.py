@@ -21,7 +21,7 @@ from app import app
 
 layout = html.Div([
 ################### start of first row #######################   
-                html.H5('Data Integrity Check Via Periodic Ouliers Detection',
+                html.H5('Data Integrity Check Via Periodic Outliers Detection',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',
@@ -84,6 +84,39 @@ layout = html.Div([
                         )), 
 
                     ]),
+                ################### start of footer row #######################   
+        
+                dbc.Row([
+                    dbc.Col(children=[
+                            dbc.Col(html.H5(children='Copyright © 2022, Dundalk Institute of Technology. All Rights Reserved',
+                            className="text-center pt-2 pb-2"),
+                                                
+                    ),
+                    dbc.Col(children=[
+                            dbc.Col(
+                            html.H5(children='Mob : +353 89 273 8178',
+                            className="text-center pb-2"),
+                                        
+                        )
+
+                    ]),
+                    dbc.Col(children=[
+                            dbc.Col(
+                            html.H5(children='Email : d00242726@student.dkit.ie',
+                            className="text-center pb-2"),
+                                        
+                        )
+
+                    ])
+
+            ]),
+            ],className="pt-2"
+            ,style={
+                'marginLeft' : '10px',
+                'marginRight': '10px',
+            }
+            )
+                ########################### End of Footer #########################
 
 ])
 

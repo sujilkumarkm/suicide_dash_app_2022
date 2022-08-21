@@ -161,6 +161,7 @@ layout = html.Div([
         'marginRight': '10px',
     }
     )
+        ########################### End of Footer #########################
 
 ])
 
