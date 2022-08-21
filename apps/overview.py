@@ -83,14 +83,14 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     dbc.Col(dbc.Col(children=[
                              dcc.RangeSlider(id='suicide_range_slider',
                                 min=0,
-                                max=180,
-                                value=[0,180],
-                                step= 1,
+                                max=600,
+                                value=[0,600],
+                                step= 10,
                                 marks={
                                     0: '0',
-                                    50: '50',
-                                    100: '100',
-                                    178: '178',
+                                    # 50: '50',
+                                    300: '300',
+                                    600: '600',
                                 },
 
                                 )
@@ -191,15 +191,16 @@ def update_graph(selected_cont,rangevalue):
     mask = df.country.isin(country_names)
     tempdf = df[mask]
     ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
-     suicides = ('suicides','sum'),
-     population = ('population','sum'),
-     gdp_per_capita = ('gdp_per_capita','sum'),
-     ).reset_index()
+    suicides = ('suicides','sum'),
+    population = ('population','sum'),
+    gdp_per_capita = ('gdp_per_capita','sum'),
+    ).reset_index()
+    print('\n\n ################## final data : ################## \t \n\n', ndf['country'].unique())
     scat_fig = px.scatter(data_frame=ndf, x="gdp_per_capita", y="sucid_in_hundredk",
                 size="sucid_in_hundredk", color="country",hover_name="country",
                 color_discrete_map=color_discrete_map, 
                 animation_frame="year",animation_group="country",
-                size_max=80, range_x=[100,1100000], range_y=[0,600],
+                size_max=80, range_x=[0,1100000], range_y=[0,600],
                 labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
@@ -232,9 +233,9 @@ def update_map(selected_cont,rangevalue,yvar):
      population = ('population','sum'),
      gdp_per_capita = ('gdp_per_capita','sum'),
      ).reset_index()
-    print('\n\n ################## final data : ################## \t \n\n', ndf)
+    # print('\n\n ################## final data : ################## \t \n\n', ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
-        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk'],animation_frame="year",    
+        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",    
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
         labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
