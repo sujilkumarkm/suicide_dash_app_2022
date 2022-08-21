@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 from app import app
 from app import server
 # import all pages in the app
-from apps import dashboard, forecast1, overview, policy, home, data, outliers
+from apps import dashboard, forecast1, overview, policy, home, data, outliers, about
 
 # building the navigation bar
 dropdown = dbc.DropdownMenu(
@@ -52,7 +52,7 @@ navbar = dbc.Navbar(
                         dbc.DropdownMenuItem("About Us", className="ml-2"),
                     ],
                     align="center",
-                ),href="/home#aboutme",),
+                ),href="/about",),
                  html.A(dbc.Row(
                     [                        
                         dbc.DropdownMenuItem("Privacy Policy", className="ml-2"),
@@ -111,8 +111,8 @@ def display_page(pathname):
         return outliers.layout
     elif pathname == '/data':
         return data.layout
-    # elif pathname == '/feedback':
-    #     return 'https://dkit.ie.narayam.net/contact'
+    elif pathname == '/about':
+        return about.layout
     
     else:
         return home.layout
