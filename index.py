@@ -9,13 +9,14 @@ import dash_bootstrap_components as dbc
 from app import app
 from app import server
 # import all pages in the app
-from apps import dashboard, forecast1, overview, policy, home, data, outliers, about
+from apps import dashboard, forecast1, overview, policy, home, data, outliers, about, general
 
 # building the navigation bar
 dropdown = dbc.DropdownMenu(
     children=[
         dbc.DropdownMenuItem("Dashboard", href="/dashboard"),
         dbc.DropdownMenuItem("Overview", href="/overview"),
+        dbc.DropdownMenuItem("General", href="/general"),
         dbc.DropdownMenuItem("Forecast Models", href="/forecast1"),
         dbc.DropdownMenuItem("Data Integrity", href="/outliers"),
         dbc.DropdownMenuItem("Data View", href="/data"),
@@ -113,6 +114,8 @@ def display_page(pathname):
         return data.layout
     elif pathname == '/about':
         return about.layout
+    elif pathname == '/general':
+        return general.layout
     
     else:
         return home.layout
