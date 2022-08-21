@@ -3,3 +3,4 @@ venv
 .DS_Store
 .env
 index.py
+/assets/processed_data/output.csv
