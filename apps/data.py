@@ -26,10 +26,11 @@ df = loc_data
 dat_columns = df.columns
 
 
+col = ['year','country', 'sex','continent' , 'age', 'sucid_in_hundredk','suicides']
 
 layout = html.Div([
             dbc.Col(children=[
-                html.H1('Suicide Data',
+                html.H1('Data Quick View',
                 style={
                     'textAlign': 'center',
                     'color': '#00000',
@@ -42,7 +43,7 @@ layout = html.Div([
             dbc.Col(children=[
                 dash_table.DataTable(
                 df.to_dict('records'),
-                [{"name": i, "id": i} for i in df.columns],
+                [{"name": i, "id": i} for i in col],
                 cell_selectable=False,
                 # Add sorting
                 sort_action='native',
@@ -52,14 +53,17 @@ layout = html.Div([
                 # Start on the first page
                 page_current=0,
                 # Render 7 items per page
-                page_size=10,
+                page_size=30,
                 ),
     
         ],style={
                     'textAlign': 'center',
                     'color': '#131414',
                 },className='text-center pb-3'),
-    ],className="pt-2"),
+    ],className="pt-2"        ,style={
+            'marginLeft' : '10px',
+            'marginRight': '10px',
+        }),
             ################### start of footer row #######################   
             
             dbc.Row([

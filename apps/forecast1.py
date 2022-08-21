@@ -106,7 +106,11 @@ layout = html.Div([
                         ], className="pt-2 pb-2"
                         )), 
 
-                    ]),
+                    ]
+                ,style={
+                'marginLeft' : '15px',
+            },),
+                
                 ################### start of footer row #######################   
         
         dbc.Row([
@@ -134,16 +138,10 @@ layout = html.Div([
 
     ]),
     ],className="pt-2"
-    ,style={
-        'marginLeft' : '10px',
-        'marginRight': '10px',
-    }
     )
         ########################### End of Footer #########################
 
-]
-,style={
-'marginLeft' : '15px',},)
+])
 
 @app.callback(
     [
