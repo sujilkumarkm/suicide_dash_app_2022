@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from pytz import country_names
 import mysql.connector as connection
@@ -32,6 +33,16 @@ from app import app
     'Slovenia': '#61615A','Spain': '#BA0900', 'Sweden': '#6B7900', 'Switzerland': '#00C2A0',
     'Turkey': '#FFAA92','United Kingdom': '#FF90C9'}
 
+colorscale=[[0.0, "rgb(165,0,38)"],
+                [0.1111111111111111, "rgb(215,48,39)"],
+                [0.2222222222222222, "rgb(244,109,67)"],
+                [0.3333333333333333, "rgb(253,174,97)"],
+                [0.4444444444444444, "rgb(254,224,144)"],
+                [0.5555555555555556, "rgb(224,243,248)"],
+                [0.6666666666666666, "rgb(171,217,233)"],
+                [0.7777777777777778, "rgb(116,173,209)"],
+                [0.8888888888888888, "rgb(69,117,180)"],
+                [1.0, "rgb(49,54,149)"]]
 
 layout = html.Div([
 ################### start of first row #######################   
@@ -172,8 +183,8 @@ def update_line_chart(country_names, range_chosen):
     dff = pd.DataFrame(np.concatenate(data), columns=columnss)
     dff=dff.infer_objects()
     mask = dff.country.isin(country_names)
-    tempdf = df[mask]
-    ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
+    tempdf = dff[mask]
+    ndf = tempdf.groupby(['year','country_code','continent','country','sex']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
      suicides = ('suicides','sum'),
      population = ('population','sum'),
      gdp_per_capita = ('gdp_per_capita','sum'),
@@ -188,8 +199,11 @@ def update_line_chart(country_names, range_chosen):
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
 
-    fig2 = px.histogram(dff[mask],x="sex", y="population", color='country')
-    # print(dff.columns)
+    ndf1 = ndf.groupby(['country']).sucid_in_hundredk.mean().nlargest(10)
+    ndf1 = pd.DataFrame({'country':ndf1.index, 'sucid_in_hundredk':ndf1.values})
+    fig2 = px.bar(ndf1, x="sucid_in_hundredk", y="country", orientation='h',color='country',color_continuous_scale='Bluered_r', hover_name="country",
+    labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+    'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     
     # start of barchart code
     female_data = pd.DataFrame(tempdf.groupby('sex').get_group('female').groupby('age').suicides.sum())
