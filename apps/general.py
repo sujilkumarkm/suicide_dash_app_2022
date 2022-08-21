@@ -213,7 +213,7 @@ def update_line_chart(cont_names, range_chosen):
     population = ('population','sum'),
     gdp_per_capita = ('gdp_per_capita','sum'),
     ).reset_index()
-    ndf1 = ndf1[ndf1['continent'] == 'Asia']
+    ndf1 = ndf1[ndf1['continent'] == 'Europe']
     # print(ndf1)
     # define colors as a list 
     colors = px.colors.qualitative.Plotly
@@ -265,7 +265,7 @@ def update_line_chart(cont_names, range_chosen):
                             name='suicides')
                                 )
     # set x-axis
-    fig.update_layout(xaxis=dict(range=[1985,max(x)]),title="Suicide changed in each Continent", title_x=0.5,uniformtext_minsize=8, uniformtext_mode='hide',
+    fig.update_layout(xaxis=dict(range=[1985,max(x)]),title="Total Suicides changed over time in Europe", title_x=0.5,uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
         showlegend=False)
 
