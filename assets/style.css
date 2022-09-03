@@ -6774,3 +6774,8 @@ h3.common-head {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner input:not([type=radio]):not([type=checkbox]){
+    color: white!important;
+}
