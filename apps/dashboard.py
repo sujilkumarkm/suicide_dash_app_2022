@@ -233,7 +233,7 @@ def update_line_chart(country_names, range_chosen):
                     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',},)
     fig1.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-        showlegend=False,title="Gender and Total Suicide Age-wise", title_x=0.5)
+        showlegend=True,title="Gender and Total Suicide Age-wise", title_x=0.5,  xaxis={'categoryorder':'total descending'})
     # end of barchart code
     
     dfff=dff.groupby(["country"], as_index=False)[["sucid_in_hundredk","gdp_per_capita"]].mean()
