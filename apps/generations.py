@@ -83,7 +83,7 @@ layout = html.Div([
         dcc.Dropdown(id='major_cat_dd',
         options=[{'label':continent, 'value':continent} for continent in major_continent],
             style={'width':'200px', 'margin':'0 auto'}),
-        html.Br(),
+        html.Br(), html.Br(), html.Br(),
         html.H3('generation Select'),
         dcc.Dropdown(id='minor_cat_dd',
             style={'width':'200px', 'margin':'0 auto'})
@@ -91,19 +91,21 @@ layout = html.Div([
         style={'width':'350px', 'height':'360px', 'display':'inline-block', 'vertical-align':'top', 'border':'1px solid black', 'padding':'20px'}),
     html.Div(children=[
             html.H3(id='chosen_major_cat_title'),
-            dcc.Graph(id='sales_line')
+            dcc.Graph(id='gen_line')
             ],
              style={'width':'700px', 'height':'380px','display':'inline-block', 'margin-bottom':'5px'}
-             )
+             ),
+    html.Br(), html.Br(), html.Br(),
+    
     ]),
   
-  
+   html.Br(), html.Br(),
     # html.Div(
     #         d_table
     #     , style={'width':'1000px', 'height':'200px', 'margin':'10px auto', 'padding-right':'30px', 'color': '#00000', },
     #     ),
   html.Div(children=[
-      dcc.Graph(id='scatter_compare'),
+    #   dcc.Graph(id='scatter_compare'),
       html.Div(dcc.Graph(id='major_cat', figure=bar_fig_country), style={'display':'inline-block'}),
       html.Div(dcc.Graph(id='minor_cat'), style={'display':'inline-block'})
             ],
@@ -121,19 +123,19 @@ def table_country(selected_columns):
     comparison_col = 'Total Suicides'
 	
     # Extract comparison col using its index
-    if selected_columns:
-        comparison_col = selected_columns[0]
+    # if selected_columns:
+    #     comparison_col = selected_columns[0]
 
-    scatter_fig = px.scatter(
-        data_frame=large_tb,
-        x='Suicide Per HundredK',
-      	# Use comparison col in figure
-        y=comparison_col,
-        color='country',
-        title=f'Suicide Per HundredK vs {comparison_col} by country'
-    )
+    # scatter_fig = px.scatter(
+    #     data_frame=large_tb,
+    #     x='Suicide Per HundredK',
+    #   	# Use comparison col in figure
+    #     y=comparison_col,
+    #     color='country',
+    #     title=f'Suicide Per HundredK vs {comparison_col} by country'
+    # )
 
-    return scatter_fig
+    # return scatter_fig
 
 @app.callback(
    Output('minor_cat_dd', 'options'),
@@ -153,7 +155,7 @@ def update_dd(major_cat_dd):
     return minor_options, major_cat_title
 
 @app.callback(
-    Output('sales_line', 'figure'),
+    Output('gen_line', 'figure'),
     Input('minor_cat_dd', 'value'))
 
 def update_line(minor_cat):
