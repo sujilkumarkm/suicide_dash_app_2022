@@ -17,7 +17,7 @@ dropdown = dbc.DropdownMenu(
         dbc.DropdownMenuItem("Dashboard", href="/dashboard"),
         dbc.DropdownMenuItem("Overview", href="/overview"),
         dbc.DropdownMenuItem("Generations", href="/generations"),
-        dbc.DropdownMenuItem("General", href="/general"),
+        # dbc.DropdownMenuItem("General", href="/general"),
         dbc.DropdownMenuItem("Forecast Models", href="/forecast1"),
         dbc.DropdownMenuItem("Data Integrity", href="/outliers"),
         dbc.DropdownMenuItem("Data View", href="/data"),
@@ -55,12 +55,6 @@ navbar = dbc.Navbar(
                     ],
                     align="center",
                 ),href="/about",),
-                 html.A(dbc.Row(
-                    [                        
-                        dbc.DropdownMenuItem("Privacy Policy", className="ml-2"),
-                    ],
-                    align="center",
-                ),href="/policy"),
         ]
     ),sticky="top",
     color="dark",
