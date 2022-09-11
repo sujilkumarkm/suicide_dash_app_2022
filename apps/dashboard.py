@@ -12,7 +12,7 @@ import mysql.connector as connection
 
 #data for the Suicide plots
 mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
-query = "Select * from suicides;"
+df = "Select * from suicides;"
 
 # df = pd.read_csv("assets/processed_data/output.csv")
 # df = df.iloc[10:1000]
