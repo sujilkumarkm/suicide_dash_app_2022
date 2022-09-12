@@ -13,15 +13,9 @@ from app import app
 import mysql.connector as connection
 
 
-mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
+mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
 query = "Select * from suicides;"
 df = pd.read_sql(query,mydb)
-# loc_data = pd.read_csv("assets/processed_data/output.csv")
-# df = loc_data
-
-#data for the Suicide plots
-#data for the region plot
-# df = pd.read_csv('assets/cleaned_data1.csv')
 dat_columns = df.columns
 
 
