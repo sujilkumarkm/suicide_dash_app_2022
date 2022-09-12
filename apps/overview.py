@@ -13,11 +13,9 @@ from dash.dash_table import DataTable, FormatTemplate
 
 
 #data for the Suicide plots
-# mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
-# query = "Select * from suicides;"
-# loc_data = pd.read_sql(query,mydb)
-loc_data = pd.read_csv("assets/processed_data/output.csv")
-df = loc_data
+mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
+query = "Select * from suicides;"
+loc_data = pd.read_sql(query,mydb)
 df = loc_data
 loc_cols=list(loc_data.columns)
 cols=list(loc_data.columns)

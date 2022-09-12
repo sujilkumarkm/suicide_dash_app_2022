@@ -12,9 +12,9 @@ from dash.dependencies import Input, Output
 import mysql.connector as connection
 
 #data for the Suicide plots
-# mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
-# query = "Select * from suicides;"
-# df = pd.read_sql(query,mydb)
+mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
+query = "Select * from suicides;"
+df = pd.read_sql(query,mydb)
 
 # df = pd.read_csv("assets/processed_data/output.csv")
 # # print(df)
@@ -23,7 +23,7 @@ import mysql.connector as connection
 # country_names = df['country'].unique()
 # cont_names = df['continent'].unique()
 
-df = pd.read_csv("assets/processed_data/output.csv")
+# df = pd.read_csv("assets/processed_data/output.csv")
 # df = pd.read_csv('/usr/local/share/datasets/df.csv')
 # logo_link = '/assets/dkit_logo.png'
 major_continent = list(df['continent'].unique())
