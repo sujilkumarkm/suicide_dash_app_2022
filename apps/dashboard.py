@@ -78,14 +78,12 @@ layout = html.Div([
                                 dbc.Col(children=[
                                 dcc.RangeSlider(id='suicides_slider',
                                     min=0,
-                                    max=180,
+                                    max=984,
                                     value=[0,180],
                                     step= 1,
                                     marks={
                                         0: '0',
-                                        50: '50',
-                                        100: '100',
-                                        178: '178',
+                                        984: '984',
                                     },
                                 )
                                 ],
