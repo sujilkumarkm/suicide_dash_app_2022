@@ -72,7 +72,7 @@ layout = html.Div([
             html.H3('continent Select'),
             dcc.Dropdown(id='major_cat_dd',
             options=[{'label':continent, 'value':continent} for continent in major_continent],
-                style={'width':'200px', 'margin':'0 auto'}),
+                style={'width':'200px', 'margin':'0 auto', 'color': 'black'}),
             html.H3('generation Select'),
             dcc.Dropdown(id='minor_cat_dd',
                 style={'width':'200px', 'margin':'0 auto', 'color': 'black'})
