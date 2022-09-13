@@ -15,17 +15,6 @@ import mysql.connector as connection
 mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
 query = "Select * from suicides;"
 df = pd.read_sql(query,mydb)
-
-# df = pd.read_csv("assets/processed_data/output.csv")
-# # print(df)
-
-# columnss=list(df.columns)
-# country_names = df['country'].unique()
-# cont_names = df['continent'].unique()
-
-# df = pd.read_csv("assets/processed_data/output.csv")
-# df = pd.read_csv('/usr/local/share/datasets/df.csv')
-# logo_link = '/assets/dkit_logo.png'
 major_continent = list(df['continent'].unique())
 large_tb = df.groupby(['country'])['sucid_in_hundredk'].agg(['sum', 'count', 'mean', 'median']).reset_index().rename(columns={'count':'Suicide Per HundredK', 'sum':'Total Suicides', 'mean':'Average Suicides Value', 'median':'Median Suicides Value'})
 ecom_country = df.groupby('country')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
@@ -72,32 +61,42 @@ from app import app
 layout = html.Div([
 #   html.Img(src=logo_link, 
 #         style={'margin':'30px 0px 0px 0px' }),
-  html.H1('Suicide breakdowns'),
-  html.Div(
-    children=[
-    html.Div(
-        children=[
-        html.H2('Controls'),
-        html.Br(),
-        html.H3('continent Select'),
-        dcc.Dropdown(id='major_cat_dd',
-        options=[{'label':continent, 'value':continent} for continent in major_continent],
-            style={'width':'200px', 'margin':'0 auto'}),
-        html.Br(), html.Br(), html.Br(),
-        html.H3('generation Select'),
-        dcc.Dropdown(id='minor_cat_dd',
-            style={'width':'200px', 'margin':'0 auto'})
-        ],
-        style={'width':'350px', 'height':'360px', 'display':'inline-block', 'vertical-align':'top', 'border':'1px solid black', 'padding':'20px'}),
-    html.Div(children=[
-            html.H3(id='chosen_major_cat_title'),
-            dcc.Graph(id='gen_line')
-            ],
-             style={'width':'700px', 'height':'380px','display':'inline-block', 'margin-bottom':'5px'}
-             ),
-    html.Br(), html.Br(), html.Br(),
     
-    ]),
+    dbc.Row(children=[
+        dbc.Col(            
+            html.Div(
+            children=[
+            html.H1('Suicide breakdowns'),
+            html.H2('Controls'),
+            html.Br(),
+            html.H3('continent Select'),
+            dcc.Dropdown(id='major_cat_dd',
+            options=[{'label':continent, 'value':continent} for continent in major_continent],
+                style={'width':'200px', 'margin':'0 auto'}),
+            html.H3('generation Select'),
+            dcc.Dropdown(id='minor_cat_dd',
+                style={'width':'200px', 'margin':'0 auto'})
+            ],
+            style={'width':'350px', 'height':'100%', 'display':'inline-block', 'vertical-align':'top', 'border':'1px solid black', 'padding':'20px'}),
+            width={"size": 4},
+        ),
+        dbc.Col(
+            html.Div(
+            children=[
+
+            html.Div(children=[
+                    html.H3(id='chosen_major_cat_title'),
+                    dcc.Graph(id='gen_line')
+                    ],
+                    style={'width':'80%', 'height':'380px','display':'inline-block', 'margin-bottom':'5px'}
+                    ),
+            html.Br(), html.Br(), html.Br(),
+            
+            ]),
+            width={"size": 8},
+        )
+    ], className='ml-2 mb-2',justify="center",),
+
   
    html.Br(), html.Br(),
     # html.Div(
