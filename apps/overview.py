@@ -62,7 +62,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                             width={"size": 4, "offset": 2},
                         ),
                         dbc.Col(
-                            html.Div("Select Suicide in Hundredk Range"),
+                            html.Div("Select Suicide in 100k Range"),
                             width={"size": 4, "offset": 2},
                         )
                  ], className='ml-2 mb-2',justify="center",),
@@ -125,7 +125,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     [
                         dcc.Dropdown(id='y_dropdown',
                         options=[                    
-                            {'label': 'Suicide in Hundredk', 'value': 'sucid_in_hundredk'},
+                            {'label': 'Suicide in 100k', 'value': 'sucid_in_hundredk'},
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
                         value='sucid_in_hundredk',
