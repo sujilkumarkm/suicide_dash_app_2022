@@ -264,7 +264,7 @@ def update_map(selected_country,rangevalue,yvar):
      ).reset_index()
     # print('\n\n ################## final data : ################## \t \n\n', ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
-        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",
+        hover_name=selected_country,hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
         labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
