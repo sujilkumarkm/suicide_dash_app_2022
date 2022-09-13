@@ -115,6 +115,39 @@ layout = html.Div([
                 ,style={
                 'marginLeft' : '15px',
             },),
+            html.Br(),html.Br(),html.Br(),
+            ################### start of descriptiom row ##################
+            dbc.Row(children=[
+                    dbc.Col(
+                        dbc.Col(html.H5(children='FOR YOUR INFORMATION:-',
+                        className="text-center pt-2 pb-2"),
+                        width={"size": 11},
+                    ),
+            )], className='ml-2 mb-2',justify="center",), 
+            dbc.Row(children=[
+                    dbc.Col(
+                        html.Div(["FB Prophet Model : An open-source library called Facebook Prophet forecasts time series data. It assists both individuals and companies in analyzing market values and forecasting the future. It puts into practice a method for predicting time series data that is based on an additive model where non-linear trends are fit with yearly, monthly, and daily seasonality, as well as holiday impacts. It functions best with historical data from multiple seasons and timeseries with seasonal impacts. Prophet is a method for predicting time series data that uses an additive model to fit non-linear trends with seasonality that occurs annually, monthly, daily, and on weekends as well as during holidays. Strongly seasonal time series and multiple seasons of historical data are ideal for it. Prophet typically manages outliers well and is robust to missing data and changes in the trend."]),
+                        width={"size": 11},
+                    ),
+                    html.Br(),html.Br(),html.Br(),
+            ], className='ml-2 mb-2',justify="center",), 
+            #################################################################
+            dbc.Row(children=[
+            dbc.Col(
+                html.Div(["Models SARIMA, ARIMAX, and SARIMAX: SARIMAX Model is a time series model to predict sequential data.Although the ARIMA model is excellent, adding seasonality and exogenous variables can have a significant impact. We must employ a different model because the ARIMA model presumes that the time series is stationary.Except for the additional set of autoregressive and moving average components, this model and the ARIMA model are quite similar. The frequency of seasonality (ex. 12 monthly, 24 hourly) cancels out the extra lags. SARIMA models allow for both seasonal frequency and non-seasonal frequency differences in data. Automatic parameter search frameworks like pmdarima (Documentation) can make it simpler to determine which parameters are ideal."]),
+                width={"size": 11},
+            ),
+            html.Br(),html.Br(),html.Br(),
+            ], className='ml-2 mb-2',justify="center",),
+            ########################################################################
+                        dbc.Row(children=[
+            dbc.Col(
+                html.Div(["Custom AR Model: The Custom Auto regression model is a customised machine learning model used to predict the suicide dataset, because this study needed a transparent working mechanism to see how these forecasting algorithms work. The most common alogrithm called Linear Regression has been used in fitting the model."]),
+                width={"size": 11},
+            ),
+            html.Br(),html.Br(),html.Br(),
+            ], className='ml-2 mb-2',justify="center",),
+            html.Br(),html.Br(),html.Br(),html.Br(),html.Br(),html.Br(),
                 
                 ################### start of footer row #######################   
         
