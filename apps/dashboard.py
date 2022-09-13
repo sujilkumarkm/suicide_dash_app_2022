@@ -53,7 +53,7 @@ layout = html.Div([
                     ),
                 dbc.Row(children=[
                         dbc.Col(
-                            html.Div(["Select Continent"]),
+                            html.Div(["Select Country Name"]),
                             width={"size": 4, "offset": 2},
                         ),
                         dbc.Col(
