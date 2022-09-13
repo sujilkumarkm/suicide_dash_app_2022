@@ -157,7 +157,7 @@ def update_line_chart(country_dropdown, year_range):
         return dash.no_update
     possible_years = [str(y) for y in range(year_range[0], year_range[1])]
 
-    raw_data = pd.read_csv("assets/processed_data/output.csv")
+    raw_data = df
     outliers = pd.read_csv("assets/processed_data/outliers.csv")
     
     raw_data = raw_data[["year","sucid_in_hundredk", "country"]]
