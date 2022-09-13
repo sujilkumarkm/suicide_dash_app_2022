@@ -47,31 +47,31 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
             'color': colors['text']
         }
     ),
-    #Add multiple line text 
-    html.Div('''
-        Suicide Rate vs GDP per Capita for different Continents from 1985 to 2005
-    ''', style={
-        'textAlign': 'center',
-        'color': colors['text']}
-    ),
+    # #Add multiple line text 
+    # html.Div('''
+    #     Suicide Rate vs GDP per Capita for different Continents from 1985 to 2015
+    # ''', style={
+    #     'textAlign': 'center',
+    #     'color': colors['text']}
+    # ),
     html.Div([
             ################### start of first row #######################   
                     dbc.Row(children=[
                         dbc.Col(
-                            html.Div(["Select Continent"]),
+                            html.Div(["Select Country Name"]),
                             width={"size": 4, "offset": 2},
                         ),
                         dbc.Col(
-                            html.Div("Select Suicide per 100k"),
+                            html.Div("Select Suicide in Hundredk Range"),
                             width={"size": 4, "offset": 2},
                         )
                  ], className='ml-2 mb-2',justify="center",),
                 dbc.Row(children=[
                     dbc.Col(children=[
-                    dcc.Dropdown(id='cont_dropdown',
+                    dcc.Dropdown(id='country_dropdown',
                                 options=[{'label': i, 'value': i}
-                                        for i in cont_names],
-                                value=cont_names,
+                                        for i in country_names],
+                                value=country_names,
                                 multi=True,
                                 style={
                                     'marginLeft' : '10px',
@@ -80,16 +80,14 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     )
                     ], className='ml-5 mb-2'),  
                     dbc.Col(dbc.Col(children=[
-                             dcc.RangeSlider(id='suicide_range_slider',
+                             dcc.RangeSlider(id='suicide_range_slider2',
                                 min=0,
-                                max=600,
+                                max=984,
                                 value=[0,600],
-                                step= 10,
+                                step= 50,
                                 marks={
                                     0: '0',
-                                    # 50: '50',
-                                    300: '300',
-                                    600: '600',
+                                    984: '984',
                                 },
 
                                 )
@@ -127,7 +125,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     [
                         dcc.Dropdown(id='y_dropdown',
                         options=[                    
-                            {'label': 'Suicides per 100k', 'value': 'sucid_in_hundredk'},
+                            {'label': 'Suicide in Hundredk', 'value': 'sucid_in_hundredk'},
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
                         value='sucid_in_hundredk',
@@ -205,33 +203,31 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
 ])
 @app.callback(
     Output(component_id='bubble_graph', component_property='figure'),
-    [Input(component_id='cont_dropdown', component_property='value'),
-    Input(component_id='suicide_range_slider', component_property='value')]
+    [Input(component_id='country_dropdown', component_property='value'),
+    Input(component_id='suicide_range_slider2', component_property='value')]
 )
-def update_graph(selected_cont,rangevalue):
-    if not selected_cont:
+def update_graph(selected_country,rangevalue):
+    if not (selected_country or rangevalue):
         return dash.no_update
-    data =[]
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
-    # d = gapminder[(gapminder['population'] >= rangevalue[0]) & (gapminder['population'] <= rangevalue[1])]
-    for j in selected_cont:
-            data.append(d[d['continent'] == j])
-    df = pd.DataFrame(np.concatenate(data), columns=cols)
+    data =[]
+    for j in selected_country:
+            data.append(d[d['country'] == j])
+    df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
-    # print(df.columns)
-    mask = df.continent.isin(cont_names)
+    mask = df.country.isin(country_names)
     tempdf = df[mask]
     ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
-    suicides = ('suicides','sum'),
-    population = ('population','sum'),
-    gdp_per_capita = ('gdp_per_capita','sum'),
-    ).reset_index()
+     suicides = ('suicides','sum'),
+     population = ('population','sum'),
+     gdp_per_capita = ('gdp_per_capita','sum'),
+     ).reset_index()
     print('\n\n ################## final data : ################## \t \n\n', ndf['country'].unique())
     scat_fig = px.scatter(data_frame=ndf, x="gdp_per_capita", y="sucid_in_hundredk",
                 size="sucid_in_hundredk", color="country",hover_name="country",
-                color_discrete_map=color_discrete_map, 
+                color_discrete_map=color_discrete_map,
                 animation_frame="year",animation_group="country",
-                size_max=80, range_x=[0,1100000], range_y=[0,600],
+                size_max=80, range_x=[0,1100000], range_y=[0,984],
                 labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',title="Suicide Per 100k and GDP Per capita over time",  title_x=0.5,)
@@ -243,23 +239,23 @@ def update_graph(selected_cont,rangevalue):
 @app.callback(
     [Output(component_id='map_chart', component_property='figure'),
     Output(component_id='line_chart', component_property='figure')],
-    [Input(component_id='cont_dropdown', component_property='value'),
-    Input(component_id='suicide_range_slider', component_property='value'),
+    [Input(component_id='country_dropdown', component_property='value'),
+    Input(component_id='suicide_range_slider2', component_property='value'),
     Input(component_id='y_dropdown', component_property='value')]
 )
-def update_map(selected_cont,rangevalue,yvar):
-    if not (selected_cont or rangevalue or yvar):
+def update_map(selected_country,rangevalue,yvar):
+    if not (selected_country or rangevalue or yvar):
         return dash.no_update
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     data =[]
-    for j in selected_cont:
-            data.append(d[d['continent'] == j])
+    for j in selected_country:
+            data.append(d[d['country'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
+    # print(df.columns)
     if yvar:
         yvar_title = yvar
-    # print(df.columns)
-    mask = df.continent.isin(cont_names)
+    mask = df.country.isin(country_names)
     tempdf = df[mask]
     ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
      suicides = ('suicides','sum'),
@@ -268,14 +264,14 @@ def update_map(selected_cont,rangevalue,yvar):
      ).reset_index()
     # print('\n\n ################## final data : ################## \t \n\n', ndf)
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
-        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",    
+        hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
         labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',title=f'{yvar_title} around the globe', title_x=0.5,)
 
-    line_fig = px.line(data_frame=ndf, 
-        x="year",  y = ndf[yvar] , color='country',line_group="country", 
+    line_fig = px.line(data_frame=ndf,
+        x="year",  y = ndf[yvar] , color='country',line_group="country",
         hover_data=['sucid_in_hundredk','year'],
         # Add bold variable in hover information
         hover_name=ndf[yvar],color_discrete_map=color_discrete_map,
@@ -284,5 +280,5 @@ def update_map(selected_cont,rangevalue,yvar):
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',title=f'{yvar_title} over time countrywise', title_x=0.5,
         paper_bgcolor='rgb(233, 238, 245)')
-        
+
     return [map_fig, line_fig]
