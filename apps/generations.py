@@ -18,7 +18,7 @@ df = pd.read_sql(query,mydb)
 major_continent = list(df['continent'].unique())
 large_tb = df.groupby(['country'])['sucid_in_hundredk'].agg(['sum', 'count', 'mean', 'median']).reset_index().rename(columns={'count':'Suicide Per HundredK', 'sum':'Total Suicides', 'mean':'Average Suicides Value', 'median':'Median Suicides Value'})
 ecom_country = df.groupby('country')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-bar_fig_country = px.bar(ecom_country, x='Total Suicides', y='country', width=500, height=450, title='Total Suicides by country (Hover to filter the generation bar chart!)', custom_data=['country'], color='country', color_discrete_map={'United Kingdom':'lightblue', 'Germany':'orange', 'France':'darkblue', 'Australia':'green', 'Hong Kong':'red'})
+bar_fig_country = px.bar(ecom_country, x='Total Suicides', y='country', width=500, height=450, title='Total Suicides by country (Hover to filter the generation bar chart!)', custom_data=['country'], color='country', color_discrete_map={'United Kingdom':'lightblue', 'Germany':'orange', 'France':'darkblue', 'Australia':'green', 'Hong Kong':'red'},labels={"Total Suicides": "Suicide per hundredk","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
 
 money_format = FormatTemplate.money(2)
 summery_col = ['Total Suicides', 'Average Suicides Value', 'Median Suicides Value']
@@ -75,7 +75,7 @@ layout = html.Div([
                 style={'width':'200px', 'margin':'0 auto'}),
             html.H3('generation Select'),
             dcc.Dropdown(id='minor_cat_dd',
-                style={'width':'200px', 'margin':'0 auto'})
+                style={'width':'200px', 'margin':'0 auto', 'color': 'black'})
             ],
             style={'width':'350px', 'height':'100%', 'display':'inline-block', 'vertical-align':'top', 'border':'1px solid black', 'padding':'20px'}),
             width={"size": 4},
@@ -86,7 +86,7 @@ layout = html.Div([
 
             html.Div(children=[
                     html.H3(id='chosen_major_cat_title'),
-                    dcc.Graph(id='gen_line')
+                    dcc.Graph(id='gen_line',)
                     ],
                     style={'width':'80%', 'height':'380px','display':'inline-block', 'margin-bottom':'5px'}
                     ),
@@ -164,8 +164,10 @@ def update_line(minor_cat):
         minor_cat_title = minor_cat
         ecom_line = ecom_line[ecom_line['generation'] == minor_cat]
     ecom_line = ecom_line.groupby('year')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-    line_graph = px.line(ecom_line, x='year',  y='Total Suicides', title=f'Total Suicides by Month for generation: {minor_cat_title}', height=350)
-    
+    line_graph = px.line(ecom_line, x='year',  y='Total Suicides', title=f'Total Suicides by Year for generation: {minor_cat_title}', height=350,labels={"Total Suicides": "Suicide per hundredk","year": "Year"},)
+    line_graph.update_layout(
+    title_x=0.5
+)
     return line_graph
 
 @app.callback(
@@ -180,7 +182,7 @@ def update_min_cat_hover(hoverData):
 
     minor_cat_df = df[df['country'] == hover_country]
     minor_cat_agg = minor_cat_df.groupby('generation')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-    ecom_bar_minor_cat = px.bar(minor_cat_agg, x='Total Suicides', y='generation', orientation='h', height=450, width=480,title=f'Suicide by generation for: {hover_country}')
+    ecom_bar_minor_cat = px.bar(minor_cat_agg, x='Total Suicides', y='generation', orientation='h', height=450, width=480,title=f'Suicide by generation for: {hover_country}',labels={"Total Suicides": "Suicide per hundredk","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
     ecom_bar_minor_cat.update_layout({'yaxis':{'dtick':1, 'categoryorder':'total ascending'}, 'title':{'x':0.5}})
 
     return ecom_bar_minor_cat
