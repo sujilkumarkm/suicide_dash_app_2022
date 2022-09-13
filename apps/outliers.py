@@ -89,8 +89,24 @@ layout = html.Div([
                     ]
                     ,style={
                     'marginLeft' : '15px',}),
+                
+                html.Br(),html.Br(),html.Br(),
+                ################### start of descriptiom row ##################
+                dbc.Row(children=[
+                        dbc.Col(
+                            dbc.Col(html.H5(children='FOR YOUR INFORMATION:-',
+                            className="text-center pt-2 pb-2"),
+                            width={"size": 11},
+                        ),
+                )], className='ml-2 mb-2',justify="center",), 
+                dbc.Row(children=[
+                        dbc.Col(
+                            html.Div(["Data integrity check is a very effective technique to find the outliers in the data. Periodic outlier detection was the technique used to identify the data integrity. An Unsupervised Machine Learning algorithm called as DB Scan is used to detect outliers. When new data is available from the database over time the relavance of this feature is effective in determining the data integrity"]),
+                            width={"size": 11},
+                        ),
+                ], className='ml-2 mb-2',justify="center",), 
+                html.Br(),html.Br(),html.Br(),html.Br(),html.Br(),html.Br(),
                 ################### start of footer row #######################   
-        
                 dbc.Row([
                     dbc.Col(children=[
                             dbc.Col(html.H5(children='Copyright © 2022, Dundalk Institute of Technology. All Rights Reserved',
@@ -120,7 +136,7 @@ layout = html.Div([
                 'marginLeft' : '10px',
                 'marginRight': '10px',
             }
-            )
+            ),
                 ########################### End of Footer #########################
 
 ])
