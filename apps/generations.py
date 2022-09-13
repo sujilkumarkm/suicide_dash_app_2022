@@ -16,9 +16,9 @@ mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',u
 query = "Select * from suicides;"
 df = pd.read_sql(query,mydb)
 major_continent = list(df['continent'].unique())
-large_tb = df.groupby(['country'])['sucid_in_hundredk'].agg(['sum', 'count', 'mean', 'median']).reset_index().rename(columns={'count':'Suicide Per HundredK', 'sum':'Total Suicides', 'mean':'Average Suicides Value', 'median':'Median Suicides Value'})
+large_tb = df.groupby(['country'])['sucid_in_hundredk'].agg(['sum', 'count', 'mean', 'median']).reset_index().rename(columns={'count':'Suicides per 100k', 'sum':'Total Suicides', 'mean':'Average Suicides Value', 'median':'Median Suicides Value'})
 ecom_country = df.groupby('country')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-bar_fig_country = px.bar(ecom_country, x='Total Suicides', y='country', width=500, height=450, title='Total Suicides by country (Hover to filter the generation bar chart!)', custom_data=['country'], color='country', color_discrete_map={'United Kingdom':'lightblue', 'Germany':'orange', 'France':'darkblue', 'Australia':'green', 'Hong Kong':'red'},labels={"Total Suicides": "Suicide per hundredk","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
+bar_fig_country = px.bar(ecom_country, x='Total Suicides', y='country', width=500, height=450, title='Total Suicides by country (Hover to filter the generation bar chart!)', custom_data=['country'], color='country', color_discrete_map={'United Kingdom':'lightblue', 'Germany':'orange', 'France':'darkblue', 'Australia':'green', 'Hong Kong':'red'},labels={"Total Suicides": "Suicides per 100k","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
 
 money_format = FormatTemplate.money(2)
 summery_col = ['Total Suicides', 'Average Suicides Value', 'Median Suicides Value']
@@ -127,11 +127,11 @@ def table_country(selected_columns):
 
     # scatter_fig = px.scatter(
     #     data_frame=large_tb,
-    #     x='Suicide Per HundredK',
+    #     x='Suicides per 100k',
     #   	# Use comparison col in figure
     #     y=comparison_col,
     #     color='country',
-    #     title=f'Suicide Per HundredK vs {comparison_col} by country'
+    #     title=f'Suicides per 100k vs {comparison_col} by country'
     # )
 
     # return scatter_fig
@@ -164,7 +164,7 @@ def update_line(minor_cat):
         minor_cat_title = minor_cat
         ecom_line = ecom_line[ecom_line['generation'] == minor_cat]
     ecom_line = ecom_line.groupby('year')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-    line_graph = px.line(ecom_line, x='year',  y='Total Suicides', title=f'Total Suicides by Year for generation: {minor_cat_title}', height=350,labels={"Total Suicides": "Suicide per hundredk","year": "Year"},)
+    line_graph = px.line(ecom_line, x='year',  y='Total Suicides', title=f'Total Suicides by Year for generation: {minor_cat_title}', height=350,labels={"Total Suicides": "Suicides per 100k","year": "Year"},)
     line_graph.update_layout(
     title_x=0.5
 )
@@ -182,7 +182,7 @@ def update_min_cat_hover(hoverData):
 
     minor_cat_df = df[df['country'] == hover_country]
     minor_cat_agg = minor_cat_df.groupby('generation')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
-    ecom_bar_minor_cat = px.bar(minor_cat_agg, x='Total Suicides', y='generation', orientation='h', height=450, width=480,title=f'Suicide by generation for: {hover_country}',labels={"Total Suicides": "Suicide per hundredk","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
+    ecom_bar_minor_cat = px.bar(minor_cat_agg, x='Total Suicides', y='generation', orientation='h', height=450, width=480,title=f'Suicide by generation for: {hover_country}',labels={"Total Suicides": "Suicides per 100k","year": "Year", 'generation': 'Generations', 'country': 'Country', },)
     ecom_bar_minor_cat.update_layout({'yaxis':{'dtick':1, 'categoryorder':'total ascending'}, 'title':{'x':0.5}})
 
     return ecom_bar_minor_cat

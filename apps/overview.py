@@ -14,7 +14,7 @@ from dash.dash_table import DataTable, FormatTemplate
 
 
 #data for the Suicide plots
-mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
+mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
 query = "Select * from suicides;"
 loc_data = pd.read_sql(query,mydb)
 df = loc_data
@@ -62,7 +62,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                             width={"size": 4, "offset": 2},
                         ),
                         dbc.Col(
-                            html.Div("Select Suicide in Hundredk Range"),
+                            html.Div("Select Suicide per 100k"),
                             width={"size": 4, "offset": 2},
                         )
                  ], className='ml-2 mb-2',justify="center",),
@@ -127,7 +127,7 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     [
                         dcc.Dropdown(id='y_dropdown',
                         options=[                    
-                            {'label': 'Suicide in Hundredk', 'value': 'sucid_in_hundredk'},
+                            {'label': 'Suicides per 100k', 'value': 'sucid_in_hundredk'},
                             {'label': 'Population', 'value': 'population'},
                             {'label': 'GDP per Captia', 'value': 'gdp_per_capita'}],
                         value='sucid_in_hundredk',
@@ -232,9 +232,9 @@ def update_graph(selected_cont,rangevalue):
                 color_discrete_map=color_discrete_map, 
                 animation_frame="year",animation_group="country",
                 size_max=80, range_x=[0,1100000], range_y=[0,600],
-                labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+                labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
-    scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
+    scat_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',title="Suicide Per 100k and GDP Per capita over time",  title_x=0.5,)
 
     return scat_fig
 
@@ -256,6 +256,8 @@ def update_map(selected_cont,rangevalue,yvar):
             data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
+    if yvar:
+        yvar_title = yvar
     # print(df.columns)
     mask = df.continent.isin(cont_names)
     tempdf = df[mask]
@@ -268,9 +270,9 @@ def update_map(selected_cont,rangevalue,yvar):
     map_fig= px.choropleth(ndf,locations="country_code", color=ndf[yvar],
         hover_name=ndf[yvar],hover_data=['continent','sucid_in_hundredk','gdp_per_capita'],animation_frame="year",    
         color_continuous_scale='Turbo',range_color=[ndf[yvar].min(), ndf[yvar].max()],
-        labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+        labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
-    map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)')
+    map_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',title=f'{yvar_title} around the globe', title_x=0.5,)
 
     line_fig = px.line(data_frame=ndf, 
         x="year",  y = ndf[yvar] , color='country',line_group="country", 
@@ -278,9 +280,9 @@ def update_map(selected_cont,rangevalue,yvar):
         # Add bold variable in hover information
         hover_name=ndf[yvar],color_discrete_map=color_discrete_map,
         # change labels
-        labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+        labels={'sucid_in_hundredk':'Suicides per 100k','year':'Year','continent':'Continent',
                 'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
-    line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',
+    line_fig.update_layout(plot_bgcolor='rgb(233, 238, 245)',title=f'{yvar_title} over time countrywise', title_x=0.5,
         paper_bgcolor='rgb(233, 238, 245)')
         
     return [map_fig, line_fig]

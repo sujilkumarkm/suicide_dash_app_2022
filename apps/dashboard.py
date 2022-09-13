@@ -202,11 +202,11 @@ def update_line_chart(country_names, range_chosen):
     ndf1 = ndf.groupby(['country']).sucid_in_hundredk.mean().nlargest(10)
     ndf1 = pd.DataFrame({'country':ndf1.index, 'sucid_in_hundredk':ndf1.values})
     fig2 = px.bar(ndf1, x="sucid_in_hundredk", y="country", orientation='h',color='country',color_continuous_scale='Bluered_r', hover_name="country",
-    labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+    labels={'sucid_in_hundredk':'Suicides Per 100k','year':'Year','continent':'Continent',
     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita',})
     fig2.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-        showlegend=False,title="Top ten countries in suicide per hundredk", title_x=0.5)
+        showlegend=False,title="Top ten countries in Suicide per 100k", title_x=0.5)
     # start of barchart code
     female_data = pd.DataFrame(tempdf.groupby('sex').get_group('female').groupby('age').suicides.sum())
     sex_female = 'female'
@@ -228,7 +228,7 @@ def update_line_chart(country_names, range_chosen):
     fig1 = px.bar(ndf, x="age", color="sex",
              y='suicides',
              barmode='relative',
-             labels={'sucid_in_hundredk':'Suicides Per Hundredk','year':'Year','continent':'Continent',
+             labels={'sucid_in_hundredk':'Suicides Per 100k','year':'Year','continent':'Continent',
                     'country':'Country','suicides':'Suicide', 'population':'Population','gdp_per_capita':'GDP per Capita','sex':'Sex','age':'Age',},)
     fig1.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
@@ -243,10 +243,10 @@ def update_line_chart(country_names, range_chosen):
             x="sucid_in_hundredk",
             y="gdp_per_capita",
             hover_data=['country'],
-            text="country",labels={"sucid_in_hundredk": "Suicide per hundredk","gdp_per_capita": "GDP Per capita","country":"Country Name"})
+            text="country",labels={"sucid_in_hundredk": "Suicide per 100k","gdp_per_capita": "GDP Per capita","country":"Country Name"})
     fig3.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-         showlegend=True,title="GDP Per capita and Suicide Per Hundredk", title_x=0.5)
+         showlegend=True,title="GDP Per capita and Suicide per 100k", title_x=0.5)
     return [fig, fig1, fig3, fig2]
 
 
