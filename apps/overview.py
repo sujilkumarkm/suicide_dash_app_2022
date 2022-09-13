@@ -1,4 +1,5 @@
 #import packages to create app
+from imp import lock_held
 from locale import locale_alias
 import dash
 from dash import dcc
@@ -13,7 +14,7 @@ from dash.dash_table import DataTable, FormatTemplate
 
 
 #data for the Suicide plots
-mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
+mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
 query = "Select * from suicides;"
 loc_data = pd.read_sql(query,mydb)
 df = loc_data
@@ -69,8 +70,8 @@ layout = html.Div(style={'backgroundColor': colors['background']},children=[
                     dbc.Col(children=[
                     dcc.Dropdown(id='cont_dropdown',
                                 options=[{'label': i, 'value': i}
-                                        for i in country_names],
-                                value=country_names,
+                                        for i in cont_names],
+                                value=cont_names,
                                 multi=True,
                                 style={
                                     'marginLeft' : '10px',
@@ -214,11 +215,11 @@ def update_graph(selected_cont,rangevalue):
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     # d = gapminder[(gapminder['population'] >= rangevalue[0]) & (gapminder['population'] <= rangevalue[1])]
     for j in selected_cont:
-            data.append(d[d['country'] == j])
+            data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=cols)
     df=df.infer_objects()
     # print(df.columns)
-    mask = df.country.isin(country_names)
+    mask = df.continent.isin(cont_names)
     tempdf = df[mask]
     ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
     suicides = ('suicides','sum'),
@@ -252,11 +253,11 @@ def update_map(selected_cont,rangevalue,yvar):
     d = loc_data[(loc_data['sucid_in_hundredk'] >= rangevalue[0]) & (loc_data['sucid_in_hundredk'] <= rangevalue[1])]
     data =[]
     for j in selected_cont:
-            data.append(d[d['country'] == j])
+            data.append(d[d['continent'] == j])
     df = pd.DataFrame(np.concatenate(data), columns=loc_cols)
     df=df.infer_objects()
     # print(df.columns)
-    mask = df.country.isin(country_names)
+    mask = df.continent.isin(cont_names)
     tempdf = df[mask]
     ndf = tempdf.groupby(['year','country_code','continent','country']).agg(sucid_in_hundredk = ('sucid_in_hundredk','sum'),
      suicides = ('suicides','sum'),
