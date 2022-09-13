@@ -14,7 +14,6 @@ import mysql.connector as connection
 mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
 query = "Select * from suicides;"
 df = pd.read_sql(query,mydb)
-
 # df = pd.read_csv("assets/processed_data/output.csv")
 # df = df.iloc[10:1000]
 columnss=list(df.columns)
@@ -244,10 +243,10 @@ def update_line_chart(country_names, range_chosen):
             x="sucid_in_hundredk",
             y="gdp_per_capita",
             hover_data=['country'],
-            text="country",labels={"sucid_in_hundredk": "Suicide per hundred thousand","gdp_per_capita": "GDP Per capita","country":"Country Name"})
+            text="country",labels={"sucid_in_hundredk": "Suicide per hundredk","gdp_per_capita": "GDP Per capita","country":"Country Name"})
     fig3.update_layout(uniformtext_minsize=8, uniformtext_mode='hide',
         plot_bgcolor='rgb(233, 238, 245)',paper_bgcolor='rgb(233, 238, 245)',
-        showlegend=False, title_x=0.5)
+         showlegend=True,title="GDP Per capita and Suicide Per Hundredk", title_x=0.5)
     return [fig, fig1, fig3, fig2]
 
 
