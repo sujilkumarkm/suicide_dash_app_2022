@@ -14,11 +14,7 @@ import mysql.connector as connection
 # mydb = connection.connect(host="localhost", database = 'dkit',user="root", passwd="",use_pure=True)
 # query = "Select * from suicides;"
 # df = pd.read_sql(query,mydb)
-mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
-query = "Select * from suicides;"
-df = pd.read_sql(query,mydb)
-# df = pd.read_csv("assets/processed_data/output.csv")
-# print(df)
+df = pd.read_csv("assets/processed_data/output.csv")
 
 columnss=list(df.columns)
 country_names = df['country'].unique()

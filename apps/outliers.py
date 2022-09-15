@@ -9,9 +9,6 @@ import plotly.graph_objects as go
 from pytz import country_names
 import mysql.connector as connection
 
-mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
-query = "Select * from suicides;"
-df = pd.read_sql(query,mydb)
 #data for the Suicide plots
 df = pd.read_csv("assets/processed_data/output.csv")
 countries = list(set(df.country.to_list()))

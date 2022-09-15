@@ -12,9 +12,7 @@ from dash.dependencies import Input, Output
 import mysql.connector as connection
 
 #data for the Suicide plots
-mydb = connection.connect(host="204.93.172.126", database = 'dkitienarayam_db',user="dkitienarayam_admin", passwd="Unnikuttan@1991",use_pure=True)
-query = "Select * from suicides;"
-df = pd.read_sql(query,mydb)
+df = pd.read_csv("assets/processed_data/output.csv")
 major_continent = list(df['continent'].unique())
 large_tb = df.groupby(['country'])['sucid_in_hundredk'].agg(['sum', 'count', 'mean', 'median']).reset_index().rename(columns={'count':'Suicides per 100k', 'sum':'Total Suicides', 'mean':'Average Suicides Value', 'median':'Median Suicides Value'})
 ecom_country = df.groupby('country')['sucid_in_hundredk'].agg('sum').reset_index(name='Total Suicides')
